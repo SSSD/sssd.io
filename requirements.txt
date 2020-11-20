@@ -1,0 +1,5 @@
+beautifulsoup4
+docutils>=0.16
+libsass
+sphinx-gitstamp
+sphinx>=3.3.1

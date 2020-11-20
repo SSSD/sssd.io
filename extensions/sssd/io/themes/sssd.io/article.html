@@ -1,0 +1,39 @@
+{% set maintoc = toctree(collapse=True, maxdepth=0, titles_only=True, includehidden=True) | picktoc(pagename, theme_toc_pattern) %}
+<div id="page-content">
+    <aside id="hamburger-menu" onclick="$('#hamburger-menu, #hamburger-menu-nav').toggleClass('active')"></aside>
+    <nav id="hamburger-menu-nav">
+        {{ maintoc }}
+    </nav>
+    <main>
+        <article>
+            <aside class="last-update">
+                {%- if gitstamp %}This page was last updated on {{ gitstamp }}.{%- endif %}
+            </aside>
+            {% if theme_design_page_path in pagename %}
+            <div class="admonition warning">
+                <p class="admonition-title">Warning</p>
+                <p>
+                    <b>This is a design page.</b> It was used to design and
+                    discuss the <b>initial implementation</b> of the change.
+                    However, the state of this document does not necessarily
+                    correspond to the current state of the implementation since
+                    <b>we do not keep this document up to date</b> with further
+                    changes and bug fixes.
+                </p>
+            </div>
+            {% endif %}
+            {{ body | fixbody }}
+            <aside class="prev-next">
+                {% if prev and prev.link in maintoc %}
+                    <a href="{{ prev.link | e }}">Go back: {{ prev.title }}</a>
+                {% else %}
+                    <span></span>
+                {% endif %}
+
+                {% if next and next.link in maintoc %}
+                    <a href="{{ next.link | e }}">See next: {{ next.title }}</a>
+                {% endif %}
+            </aside>
+        </article>
+    </main>
+</div>
