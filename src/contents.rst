@@ -1,0 +1,48 @@
+Table of Contents
+=================
+
+.. Main navigation on the side of generated articles.
+
+.. toctree::
+   :caption: Contribution
+   :maxdepth: 0
+
+   contrib/get-source
+   contrib/building-sssd
+   contrib/code-fundamentals
+   contrib/coding-style
+   contrib/running-tests
+
+.. toctree::
+   :caption: Documentation
+   :maxdepth: 0
+
+   community
+   docs/quick-start
+   docs/introduction
+
+.. toctree::
+   :caption: Troubleshooting
+   :maxdepth: 0
+
+   troubleshooting/basics
+   troubleshooting/backend
+   troubleshooting/sudo
+
+.. toctree::
+   :caption: Design Pages
+   :maxdepth: 0
+
+   design-pages/how-to-write.rst
+   design-pages/list.rst
+
+.. Main menu at the top of the page.
+   It is important to keep it as the last navigation.
+
+.. toctree::
+   :maxdepth: 0
+   :hidden:
+
+   Contribute <contrib/get-source>
+   Learn <docs/introduction>
+   Community <community>

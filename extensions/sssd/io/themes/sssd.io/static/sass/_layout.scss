@@ -1,0 +1,221 @@
+/* Put footer on the bottom of the page. */
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+    overflow-x: hidden; /* To allow search results animation. */
+}
+
+body > * {
+    flex-grow: 0;
+}
+
+body > *:nth-child(4) {
+    flex-grow: 2;
+}
+
+#page-header {
+    & {
+        @extend .flex-vcenter;
+        background-color: $header-bg-color;
+        justify-content: space-between;
+        padding: 0 0.5em;
+        font-size: 1rem;
+        height: $header-height;
+    }
+
+    > * {
+        flex-grow: 0;
+        flex-shrink: 0;
+    }
+
+    img {
+        width: $header-logo-width;
+        padding: 0.5rem 0;
+    }
+
+    ul {
+        & {
+            @extend .clear-list;
+            @extend .font-title;
+            @extend .flex-hcenter;
+        }
+
+        a {
+            & {
+                display: block;
+                padding: 1.5rem 0.75rem;
+            }
+
+            &:link, &:visited {
+                color: $header-nav-color;
+            }
+
+            &:hover, &:active {
+                color: $header-nav-active-color;
+            }
+        }
+    }
+
+    input {
+        & {
+            background-color: $search-bg-color;
+            background-image: url("../images/icon-looking-glass-gray.svg"), url("../images/icon-looking-glass-white.svg");
+            background-repeat: no-repeat;
+            background-position: right 0.3rem center, right -5rem;
+            background-size: 1rem;
+            border: 0.0625rem solid $search-border-color;
+            border-radius: 0.5rem;
+            color: $search-text-color;
+            height: 2rem;
+            width: 8rem;
+            padding: 0 0.8rem 0 0.3rem;
+            margin-left: 0.75rem;
+            transition: width 0.2s;
+            z-index: 3;
+        }
+
+        &:hover, &:hover::placeholder, &:focus, &:focus::placeholder {
+            color: $search-placeholder-active-color;
+            border-color: $search-active-border-color;
+            background-position: right -5rem, right 0.3rem center;
+        }
+
+        &:focus, &.active {
+            width: 16rem;
+        }
+
+        &::placeholder {
+            color: $search-placeholder-text-color;
+            opacity: 1;
+        }
+    }
+}
+
+#page-footer {
+    & {
+        @extend .flex-vhcenter;
+        background-color: $footer-bg-color;
+        height: $footer-height;
+    }
+
+    img {
+        width: 10rem;
+    }
+}
+
+#search-results {
+    ul {
+        & {
+            @extend .clear-list;
+            @extend .font-title;
+            background-color: $search-results-bg-color;
+            position: absolute;
+            right: -9.3rem;
+            top: 0;
+            width: 18.3rem;
+            min-height: 100vh;
+            padding-top: 4.15rem;
+            z-index: 2;
+            opacity: 0;
+            transition: 0.2s;
+        }
+
+        &.active {
+            right: 0;
+            opacity: 1;
+        }
+
+        li {
+            a {
+                display: block;
+                padding: 1rem;
+            }
+
+            a:link, a:visited {
+                    color: $search-results-text-color;
+                }
+
+            a:hover, a:active, &.active a {
+                background-color: $search-results-bg-active-color;
+            }
+
+            &.search-no-results {
+                text-align: center;
+                padding: 1rem;
+            }
+        }
+
+    }
+}
+
+#overlay {
+    & {
+        background-color: rgba(0,0,0,0.7);
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1;
+        cursor: pointer;
+        opacity: 0;
+        transition: 0.2s;
+    }
+
+    &.active {
+        opacity: 1;
+        backdrop-filter: blur(0.5rem);
+    }
+}
+
+/* Overwrites for smaller screens. */
+@media (max-width: $header-breakpoint) {
+    #page-header {
+        & {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        img {
+            padding-bottom: 0;
+        }
+
+        ul a {
+            display: block;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        input {
+            width: 16rem;
+            margin-left: 0;
+            margin-bottom: 1rem;
+            transition: none;
+        }
+
+        .flex-fill {
+            display: none;
+        }
+    }
+
+    #search-results {
+        ul {
+            & {
+                position: absolute;
+                width: 100%;
+                opacity: 0;
+                right: 0;
+                top: 9.8895625rem;
+                min-height: calc(100vh - 9.8895625rem);
+                padding-top: 0;
+                transition: opacity 0.2s;
+            }
+        }
+    }
+}

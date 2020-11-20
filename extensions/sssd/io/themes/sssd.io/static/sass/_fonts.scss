@@ -1,0 +1,20 @@
+/* Import fonts. */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Red+Hat+Text:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+/* Main font families. */
+
+.font-title {
+    font-family: Montserrat, sans-serif;
+    font-weight: 600;
+}
+
+.font-content {
+    font-family: "Red Hat Text", sans-serif;
+    font-weight: 400;
+}
+
+.font-nav {
+    font-family: "Red Hat Text", sans-serif;
+    font-weight: 400;
+}

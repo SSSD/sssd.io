@@ -1,0 +1,48 @@
+html, body {
+    @extend .font-content;
+    font-size: 100%;
+    color: $color-text;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    & {
+        @extend .font-title;
+        margin-top: 2rem;
+        margin-bottom: 0.5em;
+    }
+
+    + p {
+        margin-top: 0;
+    }
+}
+
+a:link, a:visited, a:hover, a:active {
+    text-decoration: none;
+}
+
+.clear-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.flex-fill {
+    flex-grow: 100 !important;
+    flex-shrink: 100 !important;
+}
+
+.flex-hcenter {
+    display: flex;
+    justify-content: center;
+}
+
+.flex-vcenter {
+    display: flex;
+    align-items: center;
+}
+
+.flex-vhcenter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

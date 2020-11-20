@@ -1,0 +1,175 @@
+#page-index {
+    header {
+        & {
+            @extend .flex-vhcenter;
+            background-image: url("../images/poster.jpeg");
+            background-position: left center;
+            flex-direction: column;
+            color: $poster-text-color;
+            padding: 6rem 0;
+        }
+
+        h1 {
+            & {
+                font-size: 1.8rem;
+                margin: 0;
+            }
+
+            > span {
+                @extend .flex-hcenter;
+                background-image: url("../images/logo.svg");
+                background-repeat: no-repeat;
+                background-size: $poster-logo-width auto;
+                padding: 0 0 0 calc(#{$poster-logo-width} + 1rem);
+                height: $poster-logo-height;
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+
+        p {
+            @extend .font-title;
+            font-size: 1.2rem;
+            max-width: 43rem;
+            margin: 2rem 1rem 0 1rem;
+            text-align: justify;
+        }
+    }
+
+    #links {
+        & {
+            position: relative;
+            top: -1.25rem;
+        }
+
+        h2 {
+            display: none; /* visible only with disabled css */
+        }
+
+        ul {
+            @extend .flex-vhcenter;
+            font-size: 1.1rem;
+        }
+
+        li {
+            margin: 0 0.5rem;
+        }
+
+        a {
+            & {
+                @extend .flex-vcenter;
+                background-color: $poster-link-bg-color;
+                background-image: url("../images/icon-github.svg");
+                background-position: 0.3rem center;
+                background-size: 2.5rem;
+                background-repeat: no-repeat;
+                border-radius: 0.5rem;
+                height: 2.5rem;
+                padding: 0 0.5rem 0 3rem;
+            }
+
+            &, &:link, &:visited, &:hover, &:active {
+                color: $poster-link-text-color;
+            }
+
+            &:hover, &:active {
+                background-color: $poster-link-bg-active-color;
+            }
+        }
+
+        li:first-child a {
+            background-image: url("../images/icon-download.svg");
+        }
+    }
+
+    #hints {
+        & {
+            @extend .flex-hcenter;
+            flex-wrap: wrap;
+        }
+
+        section {
+            & {
+                width: 12.5rem;
+                margin: 2rem 2rem 4rem 2rem;
+                text-align: center;
+            }
+
+            a {
+                & {
+                    display: block;
+                    background-size: 8rem;
+                    background-position: center top;
+                    background-repeat: no-repeat;
+                    margin: 0;
+                    padding: 8rem 0 0 0;
+                }
+
+                &:link, &:visited {
+                    color: $hints-text-color;
+                }
+
+                &:hover, &:active {
+                    color: $hints-active-color;
+                    filter: hue-rotate(180deg) saturate(3);
+                }
+            }
+
+            h2 {
+                font-size: 1.4rem;
+                margin-top: 0.5rem;
+                text-align: center;
+            }
+
+            p {
+                margin: 0 auto;
+                font-size: 1rem;
+                line-height: 1.5rem;
+                text-align: left;
+            }
+        }
+    }
+}
+
+@media (max-width: $poster-breakpoint) {
+    #page-index {
+        header {
+            & {
+                padding: 1rem 0 3rem 0;
+            }
+
+            h1 > span {
+                background-position: top center;
+                height: auto;
+                padding: 9.5rem 0 0 0;
+                display: block;
+                text-align: center;
+            }
+
+            h1 > span > span {
+                display: block;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+        }
+    }
+
+    #links ul {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: $hints-breakpoint) {
+    #hints {
+        & {
+            justify-content: space-evenly;
+        }
+
+        section {
+            margin-left: 0.5em;
+            margin-right: 0.5em;
+        }
+    }
+}

@@ -1,0 +1,54 @@
+/* Responsive break points. */
+$header-breakpoint: 45em;
+$poster-breakpoint: 53.125em;
+$hints-breakpoint: 82.5em;
+$article-breakpoint: 69em;
+
+/* Customizable colors. */
+$color-text: #111111;
+$color-text-concealed: #a0a0a0;
+$color-main: #f5c211;
+$color-main-active: #ffeb1e;
+$color-main-opposite: #0F8EF5;
+
+$header-nav-color: white;
+$header-nav-active-color: $color-main;
+$header-bg-color: black;
+$footer-bg-color: #deddda;
+$search-bg-color: #3b3a3f;
+$search-border-color: #656567;
+$search-text-color: #a3a2a5;
+$search-active-border-color: white;
+$search-placeholder-active-color: white;
+$search-placeholder-text-color: #a3a2a5;
+$search-results-bg-color: white;
+$search-results-bg-active-color: $color-main;
+$search-results-text-color: $color-text;
+$poster-text-color: white;
+$poster-link-bg-color: $color-main;
+$poster-link-bg-active-color: $color-main-active;
+$poster-link-text-color: $color-text;
+$hints-text-color: $color-text-concealed;
+$hints-active-color: #272727;
+$article-nav-color: $color-text;
+$article-nav-current-color: $color-main-opposite;
+$article-nav-active-color: $color-main-opposite;
+$article-link-color: $color-main-opposite;
+$article-link-active-color: #2A0FF5;
+$hamburger-bg-color: $color-main;
+$hamburger-bg-hover-color: $color-main-active;
+$hamburger-text-color: $color-text;
+$hamburger-text-active-color: $color-text;
+$lastupdate-text-color: $color-text-concealed;
+$prevnext-delimiter-color: $color-text;
+$caption-delimiter-color: $color-text;
+
+/* Customizable dimensions. */
+$header-logo-width: 6rem;
+$header-logo-height: auto;
+$header-height: auto;
+$footer-height: 6rem;
+$poster-logo-width: 17.5rem; /* Mandatory. */
+$poster-logo-height: 8.5rem;
+
+@import 'custom_vars';
