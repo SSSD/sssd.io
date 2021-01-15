@@ -8,14 +8,20 @@ with [Sphinx] documentation generator.
 
 ## Install Python dependencies
 
+It is recommended to install Python dependencies in virtual environment.
+
 ```console
-$ sudo pip3 install -r ./requirements.txt
+$ python3 -m venv .venv
+$ source .venv/bin/activate
+(.venv) $ pip3 install -r requirements.txt
 ```
+
+Note: To step out of the virtual environment, run `$ deactivate`.
 
 ## Build it
 
 ```console
-$ make html
+(.venv) $ make html
 ```
 
 ## View it
