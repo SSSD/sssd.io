@@ -16,6 +16,7 @@ Table of Contents
    contrib/running-tests
    contrib/mmap_cache
    contrib/ipc
+   contrib/internals
 
 .. toctree::
    :caption: Documentation
