@@ -23,6 +23,8 @@ Table of Contents
    docs/quick-start
    docs/introduction
    docs/reporting-bugs
+   docs/direct-ad.rst
+   docs/manual-ad.rst
 
 .. toctree::
    :caption: Troubleshooting
