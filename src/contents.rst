@@ -13,6 +13,7 @@ Table of Contents
    contrib/coding-style
    contrib/running-tests
    contrib/mmap_cache
+   contrib/ipc
 
 .. toctree::
    :caption: Documentation
