@@ -12,7 +12,7 @@ Table of Contents
    contrib/code-fundamentals
    contrib/coding-style
    contrib/running-tests
-   contrib/mmap_cache_1.15
+   contrib/mmap_cache
 
 .. toctree::
    :caption: Documentation

@@ -1,12 +1,12 @@
 .. contents:: Table of Contents
     :local:
 
-How does the memory mapped cache work
-=====================================
+Memory Mapped Cache
+===================
 
 The memory mapped cache allows client applications to look up user and group
 information very fast because the data will be mapped into the memory of the
-application. As long as the data is on the cache and valid no additional
+application. As long as the data is in the cache and valid no additional
 communication with other processes is needed.
 
 This memory area is organized in 4 parts:
@@ -62,7 +62,7 @@ not given in the header the ``major_vno`` or ``minor_vno`` must be changed if
 the slot size is changed. Each data record for an individual user or group (see
 below) can occupy one or more consecutive slots.
 
-At startup the data table is initialized with 0xff (all bits set) which is
+At startup the data table is initialized with ``0xff`` (all bits set) which is
 treated as invalid value by the memory cache code independent if 1, 4 or 8 bytes
 are read.
 
@@ -70,54 +70,52 @@ The Free Table
 --------------
 
 The memory area is treated as bit-field. Each bit corresponds to a slot in the
-data table starting with the highest bit (0x80) of the first byte in the free
-table.
+data table starting with the highest bit (``0x80``) of the first byte in the
+free table.
 
-At startup the free table is initialized with 0x00 (no bit set) which
+At startup the free table is initialized with ``0x00`` (no bit set) which
 corresponds to a completely empty data table.
 
 The Hash Table
 --------------
 
-The hash table it treated as an array of uint32_t values. The index used to
+The hash table it treated as an array of ``uint32_t`` values. The index used to
 access the array is the hash value calculated from the user or group name or ID
 and the hash value is the slot number in the data table where the data record
 for the object starts.
 
-At startup the hash table is initialized with 0xff which indicates that there is
-no data available for the give hash.
+At startup the hash table is initialized with ``0xff`` which indicates that
+there is no data available for the given hash.
 
 Sizes of the tables
 -------------------
 
 From the previous sections it became clear that although the sizes of the data,
-free and hash table are handled independently they are connected. Of course the
+free and hash tables are handled independently they are connected. Of course the
 free table should have at least so many bit as there are slots in the data
 table. But having more would be a waste of space (although not as much as having
 lesser bits). So number of bits and slots should match.
 
-The size of the data table should be large enough to help the amount of expected
-data where expected do not necessarily mean e.g. all possible users but the
-amount of data needed on the host running SSSD to work efficiently. It should be
-large enough so that data in active use has not to be overwritten constantly
-with other data. So let's say there should of *N* data elements in the cache
-(currently the hard-coded default is ``#define SSS_MC_CACHE_ELEMENTS 50000``).
-Depending on the slot size and the type of data one slot might not be sufficient
-to hold a data element of average size so there is a payload which says how many
-slots are used typically for a data element. See below for a discussion about
-the payload of the current data types. For the size of the data table we now
-have *N* times the payload size.
+The size of the data table should be large enough to contain the expected
+data (amount of data needed on the host running SSSD to work efficiently). It
+should be large enough so that data in active use does not have to be
+overwritten constantly with other data. So let's say there are *N* data elements
+in the cache. Depending on the slot size and the type of data one slot might not
+be sufficient to hold a data element of average size so there is a payload which
+says how many slots are used typically for a data element. See below for a
+discussion about the payload of the current data types. For the size of the data
+table we now have *N* times the payload size.
 
-With the number of data elements *N* we now can define the size of the hash
+With the number of data elements *N* we can now define the size of the hash
 table as well. Since the data typically can be accessed either by name or ID we
 need 2 times *N* entries in the hash table array for the ideal case where no
 hash collisions occur. Since we always have to expect and handle hash collisions
 it won't help to use more memory for the hash table. On the other hand hash
-collisions should be avoided where possible because they make the handling of
-the memory cache more complex and slower. Since using less than 2 times *N*
-entries will force hash collisions if the cache is filled with the expected
-number of elements just using ``2 * N * sizeof(uint32_t)`` for the hash table
-size looks like a good compromise.
+collisions should be avoided where possible because handling of the memory
+caches becomes slower and more complex. Using less than 2 times *N* entries will
+force hash collisions if the cache is filled with the expected number of
+elements just using ``2 * N * sizeof(uint32_t)`` for the hash table size looks
+like a good compromise.
 
 .. image:: memory_cache_tables.svg
 
@@ -127,23 +125,23 @@ How the data is organized
 Currently there are three different kind of data elements
 
 passwd
-    For user data defined by ``struct passwd``, see ``man getpwnam`` for details
+    User data defined by ``struct passwd``, see ``man getpwnam`` for details
 
 group
-    For group data defined by ``struct group``, see ``man getgrnam`` for details
+    Group data defined by ``struct group``, see ``man getgrnam`` for details
 
 initgroups
-    For the group memberships of user
+    Group memberships of user
 
-All three types are stored in individual cache files. This allows to handle the
-payload size flexible and avoids hash collisions of different data types
-accessed with the same name. Besides the type specific data all data elements
-start with a common header.
+All three types are stored in individual cache files. This allows a flexible
+playload size and avoids hash collisions of different data types accessed with
+the same name. Besides the type specific data all data elements start with a
+common header.
 
 The Record Header
 ^^^^^^^^^^^^^^^^^
 
-Similar the cache header the record header is defined in
+Similar to the cache header, the record header is defined in
 ``src/util/mmap_cache.h`` as:
 
 .. code-block:: c
@@ -159,21 +157,20 @@ Similar the cache header the record header is defined in
         uint32_t hash1;         /* val of first hash (usually name of record) */
         uint32_t hash2;         /* val of second hash (usually id of record) */
         uint32_t padding;       /* padding & reserved for future changes */
-        uint32_t b2;            /* barrier 2 - 32 bytes mark, fits a slot */
+        uint32_t b2;            /* barrier 2 */
         char data[0];
     };
 
-Similar as in the cache header ``b1`` and ``b2`` (the *32* in the comment is
-wrong, it is kept here because it is the same in the source code as well) are
-used for memory barriers.  ``len`` is the total length of the data record which
-includes the header size and the type specific data which starts at ``data``. If
-the current time return by ``time()`` is larger than the value stored ``expire``
-the data in the memory should not be used anymore but SSSD's nss responder
-should be called to refresh the data.
+Similar as in the cache header ``b1`` and ``b2`` are used for memory barriers.
+``len`` is the total length of the data record which includes the header size
+and the type specific data which starts at ``data``. If the current time return
+by ``time()`` is larger than the value stored in ``expire`` the data in the
+memory cache should not be used anymore but SSSD's NSS responder should be
+called to refresh the data.
 
-``hash1`` and ``hash2`` are the two has values which are used to find the right
-starting slot of the data record in the hash table. In theory they are not
-needed here but are used for a fast and easy consistency check.
+``hash1`` and ``hash2`` are used to find the right starting slot of the data
+record in the hash table. In theory they are not needed here but are used for a
+fast and easy consistency check.
 
 Finally ``next1`` and ``next2`` are used to handle hash collisions. Both value
 are initialized with ``MC_INVALID_VAL``. If a hash collision is detected, i.e.
@@ -247,13 +244,13 @@ A complete passwd/user record look like:
 
 where each block represents one slot (40 bytes).
 
-The total length ``len`` of this record is 0x71(113) bytes. There are no hash
-collisions as can be seen by the 0xff in the third line.
+The total length ``len`` of this record is ``0x71`` (113) bytes. There are no
+hash collisions as can be seen by the 0xff in the third line.
 
 ``struct sss_mc_pwd_data`` starts with the second block. The name string starts
-after 0x10(16) bytes. The uid and gid of the user are 0x2bb9d900(733600000) and
-all strings together including the terminating 0x00s are 0x39(57) bytes long.
-The reminder of the last slot is filled with 0xff.
+after ``0x10`` (16) bytes. The uid and gid of the user are ``0x2bb9d900``
+(733600000) and all strings together including the terminating ``0x00s`` are
+``0x39`` (57) bytes long. The reminder of the last slot is filled with ``0xff``.
 
 The Group Data
 ^^^^^^^^^^^^^^
@@ -325,12 +322,12 @@ Here is an example for a group with 8 members:
     00000108: 6632 362e 6465 7665  f26.deve
     00000110: 6c00 ffff ffff ffff  l.......
 
-The full record is 0x112(274) bytes long and occupies 7 slots. The ``struct
+The full record is ``0x112`` (274) bytes long and occupies 7 slots. The ``struct
 sss_mc_grp_data`` starts at the second slot, the name of the group can be found
-0x10(16) bytes later, the GID is 0x2bb9d92a(733600042) and the groups has 8
-members. The ``strs`` blob is 0xda(218) bytes long. Following the group name and
-the group password ('*') the names of the 8 group members
-test-usera@ipaf26.devel, ..., test-userh@ipaf26.devel can be found.
+``0x10`` (16) bytes later, the GID is ``0x2bb9d92a`` (733600042) and the groups
+has 8 members. The ``strs`` blob is ``0xda`` (218) bytes long. Following the
+group name and the group password ('*') the names of the 8 group members
+``test-usera@ipaf26.devel, ..., test-userh@ipaf26.devel`` can be found.
 
 The Initgr Data
 ^^^^^^^^^^^^^^^
@@ -352,7 +349,7 @@ Finally the initgr data is defined in ``src/util/mmap_cache.h`` as:
     };
 
 Here we can see some differences to the previous two structs, there are two
-names and two different kind of data areas. First we will have a looks to the
+names and two different kind of data areas. First we will look into the
 data areas. The ``getgrouplist`` and similar other calls will return a list of
 GIDs of groups the user is a member of. So the first part of the data blob
 starting at ``gids`` is an array of ``uint32_t`` of size ``num_groups`` containing
@@ -372,23 +369,23 @@ GID, respectively, and multiple names can be assigned to a single UID or GID.
 Traditionally there are ``struct passwd`` and ``struct group`` to map the UID or
 GID with a single name and the ``getpwnam``, ``getpwuid``, ``getgrnam`` and
 ``getgrgid`` calls are used to find the ID for a name and vice versa. But there
-is not restriction that the names used as first argument to ``getpwnam`` or
+is no restriction that the names used as first argument to ``getpwnam`` or
 ``getgrnam`` have to be the same as the ones returned as ``pw_name`` or
 ``gr_name`` in the related structs. ``pw_name`` and ``gr_name`` returned in
-``struct passwd`` and ``struct group`` respectively can be considered a canonical
-names. The names used as first argument for ``getpwnam`` and ``getgrnam``, as
-long as they are differ from the canonical name, can be considered as alias
-names.
+``struct passwd`` and ``struct group`` respectively can be considered as
+canonical names. The names used as first argument for ``getpwnam`` and
+``getgrnam``, as long as they differ from the canonical name, can be considered
+as alias names.
 
 Coming back to the memory mapped cache. The user and group data in the memory
 cache only contain a single name, the canonical name. This means a user or group
 entry can be only found in the memory mapped cache if the canonical name is used
-to lookup the entry. The is in general not an issue with many Unix/Linux based
-use case. But if e.g. the users are managed in Active Directory there might be
-different expectations about the name format, see e.g. `MSDN: User Name Formats`_.
-Besides the short *logon name* the fully-qualified *user principal name (UPN)*
-or the old NT style *down-level logon name* can be used. What makes it even
-worse is that names in AD are treated case-insensitive.
+to lookup the entry. There is not an issue with many Unix/Linux based use case
+in general, but if the users are managed in Active Directory there might be
+different expectations about the name format, see e.g. `MSDN: User Name
+Formats`_. Besides the short *logon name* the fully-qualified *user principal
+name (UPN)* or the old NT style *down-level logon name* can be used. What makes
+it even worse is that names in AD are treated case-insensitive.
 
 .. _MSDN\: User Name Formats: https://msdn.microsoft.com/de-de/library/windows/desktop/aa380525(v=vs.85).aspx
 
@@ -398,15 +395,14 @@ But this would fail if e.g. the related user is deleted on the server and has to
 be deleted in the memory mapped cache as well. Now all entries must be checked
 if they are somehow related to the deleted entry. To avoid this the canonical
 name is added as well and its hash is written to the otherwise unused ``hash2``
-element of ``struct sss_mc_rec``. Now can use different alias name to look up an
-object and after the first lookup will add an record with this name to the
-cache. If there are changes on the server to the object all instances can be
-found with the canonical name and handled accordingly.
+element of ``struct sss_mc_rec``. Now Now different alias names can be used to
+look up an object and after the first lookup will add an record with this name
+to the cache. If there are changes on the server to the object all instances can
+be found with the canonical name and handled accordingly.
 
 .. image:: memory_cache_initgr.svg
 
-Finally here is a example of how an initgr memory mapped cache record looks
-like:
+Here is a example of what an initgr memory mapped cache record looks like:
 
 .. code-block:: hexdump
 
@@ -428,19 +424,20 @@ like:
     00000068: 7465 7374 2d75 7365  test-use
     00000070: 7261 00ff ffff ffff  ra......
 
-As usual the first slot contains ``struct sss_mc_rec``. As can be seen there are
-two different hash values 0x14dbe and 0x9f04 indicating that ``name`` and
-``unique_name`` are different. ``struct sss_mc_initgr_data`` start with the
+As usual the first slot contains ``struct sss_mc_rec``. There are two different
+hash values ``0x14dbe`` and ``0x9f04`` indicating that ``name`` and
+``unique_name`` are different. ``struct sss_mc_initgr_data`` starts with the
 second slot. The first two relative pointers give the start of ``unique_name``
 and ``name``, respectively. Given that ``struct sss_mc_initgr_data`` starts at
-0x28(40) ``unique_name`` starts 0x28(40) bytes later at 0x50(80). Similar
-``name`` starts 0x40(64) after the start of the initgr data at 0x68(104). Since
-the two names are the only strings used here ``strs`` is 0x28(40) as well and
-the length ``strs_len`` of both strings is 0x23(35) bytes. Together with the
-GIDs the total ``data_len`` is 0x33(51) bytes. This means 16 bytes more than the
-strings alone with is agreement to the number of GIDs ``num_groups`` 0x4(4). The
-GIDs of the groups are 0x2bb9d92a(733600042), 0x2bb9d933(733600051),
-0x2bb9d934(733600052) and 0x2bb9d935(733600053).
+``0x28`` (40) ``unique_name`` starts ``0x28`` (40) bytes later at ``0x50`` (80).
+Similar ``name`` starts at ``0x40`` (64) after the start of the initgr data at
+``0x68`` (104). Since the two names are the only strings used here ``strs`` is
+``0x28`` (40) as well and the length ``strs_len`` of both strings is ``0x23``
+(35) bytes. Together with the GIDs the total ``data_len`` is ``0x33`` (51)
+bytes. This means 16 bytes more than the strings alone with is agreement to the
+number of GIDs ``num_groups`` ``0x4`` (4). The GIDs of the groups are
+``0x2bb9d92a`` (733600042), ``0x2bb9d933`` (733600051), ``0x2bb9d934``
+(733600052) and ``0x2bb9d935`` (733600053).
 
 How does a Client lookup an Entry?
 ----------------------------------
@@ -460,48 +457,48 @@ of the 32bit hash value and the size of the hash table array is calculated.
 
 This value is now taken to lookup an entry in the hash table array. If it is
 ``MC_INVALID_VAL`` there is no matching entry in the cache and the request must
-be forwarded to SSSD's nss responder.
+be forwarded to SSSD's NSS responder.
 
 If the hash table entry contains another value it is assumed to be the starting
 slot number of the related entry in the data table. After the entry is read
 first the hashes (``hash1`` for name based and ``hash2`` for ID based lookups)
-are compared with the input hash. If they match the input value (name or ID)
-itself is compared with the related data from the entry. If they match as well
-the data from the entry is returned to the caller in the expected format. If one
-of the comparisons fails the next entry (if any) with the same hash value is
-lookup up by reading the slot number stored in ``next1`` or ``next2`` depending
-if the input hash matches ``hash1`` or ``hash2`` respectively.
+are compared with the input hash. If they match, the input value (name or ID) is
+compared with the related data from the entry. If they match as well the data
+from the entry is returned to the caller in the expected format. If one of the
+comparisons fail, the next entry (if any) with the same hash value is lookup up
+by reading the slot number stored in ``next1`` or ``next2`` depending if the
+input hash matches ``hash1`` or ``hash2`` respectively.
 
-If no matching entry was found the request must be forwarded to SSSD's nss
+If no matching entry was found the request must be forwarded to SSSD's NSS
 responder.
 
 How does the NSS Responder store an Entry?
 ------------------------------------------
 
 First the NSS responder calculates the hash in the same way as the client and
-checks if the entry already exists if needed by following the chain of the
+checks if the entry already exists and is needed by following the chain of the
 ``next`` elements. If the entry already exists in the memory cache and
 occupies the same number of slots as needed for the new data the old entry is
 just overwritten with the new data.
 
 When filling the memory cache the NSS responder keeps track of the next slot
-which follows the last inserted entry. As long as not all slots are used and
-the number of remaining slots is larger than the number of needed slots for
-the new entry the next free slot and the following free ones are used to store
-the entry and the next slot is remembered again.
+which follows the last inserted entry. As long as a slot is free and the number
+of remaining slots is larger than the number of needed slots for the new entry
+the next free slot and the following free ones are used to store the entry and
+the next slot is remembered again.
 
 If the cache is already full, the free table is used to search to the needed
-number of consecutive free slots. If none where found the entry the remembered
-next slot is pointing to is invalidate and if needed the following entries as
-well to make room for the new entry.
+number of consecutive free slots. If none were found the next slot the entry is
+pointing to is invalidated and if needed the following entries as well to make
+room for the new entry.
 
-This means that this simple scheme becomes inefficient if the cache is full
-and more and more new entries has to be added to the cache. In the worst case
-the full cache is searched for empty slots every time before the new entry is
-added by overwritten an existing entry. Additionally the lifetime of the
-cached entries is not taken into account when overwriting existing entries.
+This simple scheme becomes inefficient if the cache is full and more and more
+new entries have to be added to the cache. In the worst case the full cache is
+searched for empty slots every time before the new entry is added by overwritten
+an existing entry. Additionally the lifetime of the cached entries is not taken
+into account when overwriting existing entries.
 
-After the new slots where found the entry is written to the memory mapped
-cached protected by memory barriers. And finally the starting slot number is
-either written to the hash table or to the corresponding ``next`` element at
-the end of the chain of entries with the same hash value.
+After the new slots were found the entry is written to the memory mapped cached
+protected by memory barriers. The starting slot number is either written to the
+hash table or to the corresponding ``next`` element at the end of the chain of
+entries with the same hash value.
