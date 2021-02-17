@@ -1,254 +1,150 @@
-Inter-process communication between SSSD processes
-==================================================
+Inter-process Communication
+###########################
 
-This document describes how the different SSSD processes communicate
-between one another with a special emphasis on the Sbus protocol. In
-addition, the document describes the interfaces SSSD might use to
-communicate with external libraries or programs, such as libkrb5 or how
-are the requests from NSS and PAM modules received.
+This document describes the inter-process communication mechanism that is used
+between various SSSD components.
 
-An overview of the SSSD architecture
-------------------------------------
+Architecture overview
+*********************
 
 The SSSD consists of several processes, each of them has its own
 function. The SSSD processes can be one of the following:
 
-#. the *monitor* - The purpose of the monitor process is to spawn the
-   other processes, periodically ping them if to check if they are still
-   running and respawn them if not. There is only one instance of the
-   monitor process at a given time.
-#. a *data provider* - The data provider process communicates with the
-   remote server (i.e. queries the remote server for a user) and updates
-   the cache (i.e. writes the user entry. There is one Data Provider
-   process per remote server.
-#. a *responder* - The system libraries (such as the Name Service Switch
-   module or the PAM module) communicate with the corresponding
-   responder process. When the responder process receives a query, it
-   checks the cache first and attempts to return the requested data from
-   cache. If the data is not cached (or is expired), the responder sends
-   a message to the Data Provider requesting the cache to be updated.
-   When the Data Provider is done updating the cache, the responder
-   process checks the cache again and returns the updated data. It is
-   important to note that the responder process never returns the data
-   directly from the server, the data is always written to the cache by
-   the Data Provider Process and returned to the calling library in the
-   responder process.
-#. a *helper process* - The SSSD performs some operations that would be
-   blocking, such as kinit in a special helper sub-process. The
-   sub-processes are forked from the Data Provider processes again for
-   each operation, there is no preforked pool of helper processes. The
-   SSSD establishes pipes towards the processes' standard input and
-   output to communicate with the child using an ad-hoc wire protocol.
+Monitor
+    The purpose of the monitor process is to spawn the other processes and to
+    make sure they are restarted if they exit unexpectedly. There is only one
+    instance of the monitor process at a given time.
 
-DBus and SBUS
--------------
+Backend
+    The backend process communicates with the remote server (e.g. queries the
+    remote server for a user) and updates the cache (e.g. writes the user
+    entry). There is one backend process per domain.
 
-The SSSD uses the DBus protocol to pass messages between the SSSD
-processes. It should be noted that the core SSSD does NOT listen on or
-use the system bus. The SSSD only uses the DBus protocol to pass
-messages between the processes. There is a public SSSD DBus interface,
-starting with the 1.12 upstream release, but that resides in a separate
-sub-package and is not related to the interprocess communication between
-the different components.
+Responder
+    The system libraries (such as the Name Service Switch module or the PAM
+    module) communicate with the corresponding responder process. When the
+    responder process receives a query, it checks the cache first and attempts
+    to return the requested data from cache. If the data is not cached (or is
+    expired), the responder sends a message to the backend requesting the cache
+    to be updated. When the backend is done updating the cache, the responder
+    process checks the cache again and returns the updated data. It is important
+    to note that the responder process never returns the data directly from the
+    server, the data is always written to the cache by the backend process and
+    returned to the calling library in the responder process.
 
-A quick overview of the DBus concepts
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Helpers
+    SSSD runs in asynchronous mode so it is able to serve multiple requests in
+    parallel. However, this is not achieved by threads but by event driven
+    programming. Therefore operations that cannot be executed in a non-blocking
+    way are run in a special helper process. The helper process is spawned so it
+    can perform an otherwise blocking operation (e.g. ``kinit``). Example of
+    such process are ``krb5_child`` and ``ldap_child``.
 
-The DBus protocol consists of several primary components:
+Clients and client libraries
+    A client is an external process that talks to SSSD responders through their
+    relevant client libraries. For example the application that wants to
+    authenticate the user via PAM is a client that talks through ``pam_sss.so``
+    client library with the SSSD's PAM responder.
 
-#. The *D-BUS Server* - Rather than accepting connections and listening
-   for requests on that connection, the D-BUS server is instead used
-   only for establishing connections. A DBus server is identified by its
-   address. Server addresses consist of a transport name followed by a
-   colon, and then an optional, comma-separated list of keys and values
-   in the form key=value, for example ``unix:path=/tmp/dbus-test``.
-#. The *D-BUS Connection* - Once a D-BUS connection has been made to a
-   D-BUS server, it becomes a peer-to-peer connection. Either end of the
-   connection can listen for method calls or signals, and either end can
-   initiate them.
-#. The *D-BUS Message* - D-BUS messages come in three primary forms.
-   These are D-BUS method calls, D-BUS Signals and D-BUS errors. D-BUS
-   signals and D-BUS errors are one-way messages from one end of a D-BUS
-   connection to the other, intended to carry a brief message (such as a
-   signal to start or stop a service, or a notification that an error
-   has occurred in the connection). D-BUS errors are usually generated
-   by the internal D-BUS API itself, though they can be generated by
-   your own code as well. D-BUS method calls are the bread-and-butter of
-   the D-BUS protocol. The purpose of these calls is to essentially run
-   a method on a remote process and treat it as if it had been run
-   locally. These calls may (or may not) receive replies from the other
-   end of the connection.
-#. The *D-BUS System Bus* - The system bus is a special implementation
-   of the D-BUS protocol. It was designed by the freedesktop project to
-   handle communication between the many system daemons. We DO NOT use
-   the system bus in the SSSD.
+IPC Methods
+***********
 
-DBus and S-Bus
-~~~~~~~~~~~~~~
+SSSD uses three kinds of inter-process communication methods.
 
-For performance reasons, the SSSD works in a completely non-blocking way
-using the tevent event loop library from the Samba project. To integrate
-the DBus API with the event loop and provide a level of abstraction, the
-SSSD uses a wrapper around the D-Bus library called the S-Bus. The S-Bus
-code can be found in the
-`src/sbus <https://pagure.io/SSSD/sssd/blob/master/f/src/sbus>`__
-subdirectory. In particular, the wrappers and tevent integration can be
-found in
-`sssd\_dbus\_common.c <https://pagure.io/SSSD/sssd/blob/master/f/src/sbus/sssd_dbus_common.c>`__
-and
-`sssd\_dbus\_connection.c <https://pagure.io/SSSD/sssd/blob/master/f/src/sbus/sssd_dbus_connection.c>`__
-files. When the message is received, the tevent loop invokes the
-``sbus_message_handler`` function which is located in
-`sssd\_dbus\_connection.c <http://https://pagure.io/SSSD/sssd/blob/master/f/src/sbus/sssd_dbus_connection.c>`__.
-The handler selects the SSSD internal interface that receives the
-message and invokes the appropriate handler.
+D-Bus
+    The D-Bus protocol is used for communication between core SSSD components --
+    monitor, backends and responders.
 
-Describing the SBUS and public DBus interfaces
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Starting with upstream version 1.12, when the SSSD implemented its
-public DBus interface, the SSSD switched from hardcoding interface
-names, methods etc. in the source files directly to only describing the
-interfaces in XML files using the `introspection
-format <http://dbus.freedesktop.org/doc/dbus-specification.html#introspection-format>`__,
-which are then used to autogenerate message handlers, property getters
-and similar. While using generated code might sound odd at first, using
-a code generator removes a large amount of code duplication, packing and
-unpacking from DBus types to C types or vice versa, or unpacking DBus
-message properties (if needed).
-
-The code generator and the generated code are currently used for both
-the DBus public interface (which is outside the scope of this page) and
-the internal SBUS communication. The internal SBUS code, however, uses
-the generated code in a 'raw' mode mostly and still does
-packing/unpacking of the parameters on its own. The reason is that the
-'raw' code in SSSD predates the code generator, is quite stable and
-tested and converting it to the easier handlers with unpacked parameters
-might cause functional regressions.
-
-One example of the canonical XML code might be found in the `unit
-tests <https://pagure.io/SSSD/sssd/blob/master/f/src/tests/sbus_codegen_tests.xml>`__,
-along with the `corresponding autogenerated
-code <https://pagure.io/SSSD/sssd/blob/master/f/src/tests/sbus_codegen_tests_generated.c>`__.
-The XML files for the internal interfaces, such as the `Data
-Provider <https://pagure.io/SSSD/sssd/blob/master/f/src/providers/data_provider_iface.xml>`__
-can also be inspected. Since all the internal interfaces use the raw
-approach, the autogenerated code is `quite
-terse <https://pagure.io/SSSD/sssd/blob/master/f/src/providers/data_provider_iface_generated.c>`__
-and the `interface
-handlers <https://pagure.io/SSSD/sssd/blob/master/f/src/providers/data_provider_be.c>`__
-do the packing and unpacking on their own.
-
-An SBus server
-~~~~~~~~~~~~~~
-
-An S-Bus server is an abstraction of the DBus server. An S-Bus server is
-always identified with an UNIX socket located in the directory
-``/var/lib/sss/pipes/private``. Two processes act as an S-Bus server in
-the SSSD:
-
-#. The monitor - Both the responders and the Data providers establish
-   connection to the monitor after startup. The monitor then
-   periodically sends "pings" to the worker processes to check if they
-   are still up and running. The other S-Bus methods the monitor can
-   invoke include "rotateLogs" to force log rotation or "resetOffline"
-   to force that the next operation attempts to contact the remote
-   server regardless of the connection status. The complete list of
-   methods is in
-   `src/monitor/monitor\_interfaces.h <https://pagure.io/SSSD/sssd/blob/master/f/src/monitor/monitor_interfaces.h#n30>`__
-
-   -  listens on ``/var/lib/sss/pipes/private/sbus-monitor``.
-
-#. The Data Providers - The Responder processes connect to the Data
-   Provider processes with a cache update request. The Data Provider
-   then communicates with the remote server, updates the cache and sends
-   a message back to the responder, indicating that the cache was
-   updated. Each responder calls a different DBus method depending on
-   the data type the cache should be updated with. For example, the
-   ``getAccountInfo`` method is called from the NSS.
-
-   -  listens on ``/var/lib/sss/pipes/private/sbus-dp_$domain_name``
-
-Two kinds of messages
-~~~~~~~~~~~~~~~~~~~~~
-
-The SSSD sends an SBUS message between two of its components under two
-different circumstances:
-
-#. When a request is received, completing the request might require
-   communicating with another subprocess. An example of this is when a
-   ``getpwnam()`` call triggers an LDAP search - the NSS responder sends
-   an SBUS message to the Data Provider to update the cache.
-#. Control messages sent by the monitor. The monitor process (aka the
-   sssd process) sends periodical ``ping`` messages to all subprocesses
-   it controls. If a subprocess doesn't respond with a ``pong`` message
-   in time, it gets killed and restarted.
-
-This means, there is ongoing sbus communication even though the sssd is
-otherwise idle.
+Client wire protocol
+    SSSD implements a custom wire protocol over well known sockets for
+    communication between client libraries and responders.
 
 UNIX signals
-------------
+    SSSD processes also listen to various UNIX signals.
 
-Apart from the internal SBUS communication, SSSD also uses UNIX signals
-for certain functionality - either for communication with external
-utilities or for cases where the SBUS communication might not work, such
-as an unresponsive worker process. Below is an overview of the supported
-signals and their use. The signal handlers are typically integrated with
-the tevent event loop using its ``tevent_add_signal`` call.
+D-Bus and sbus
+==============
+
+SSSD uses the `D-Bus protocol`_ for inter-process communication between its
+components. However, it does not use the public system bus, but rather runs a
+private D-Bus server.
+
+D-Bus is not used directly but SSSD implements a wrapper around ``libdbus``
+called ``sbus`` which integrates D-Bus with ``tevent`` and ``talloc`` -- the
+event and memory managements libraries that are heavily used inside SSSD. The
+terms ``D-Bus`` and ``sbus`` are used interchangeably in the developers
+terminology.
+
+.. _D-Bus protocol: https://www.freedesktop.org/wiki/Software/dbus
+
+
+Basic D-Bus concepts
+--------------------
+
+The D-Bus protocol consists of several primary components:
+
+D-Bus server
+    The server accepts connections and routes communication (messages) between
+    two or more endpoints. Each connection to the server is associated with one
+    or more well-known or anonymous names and can send and also receive
+    messages from another connection.
+
+D-Bus message
+    The message is a key communication component that is transmitted between two
+    or more connections. There are three types of messages -- method call,
+    signal and error.
+
+    * The method call is a unicast message that can be replied to.
+    * The error message is a possible reply to the method call.
+    * The signal is a broadcast message that is sent to every one that listens
+      to it.
+
+System bus
+    The system bus is a well-known instance of a D-Bus server. There is one
+    system bus that can be accessed by all users.
+
+Session bus
+    The session bus is another well-known instance of a D-Bus server. There is
+    one session bus per user session and it can be accessed only by the user.
+
+Client wire protocol
+====================
+
+SSSD creates several local ``AF_UNIX`` sockets. These sockets are used for
+communication between clients (e.g. ``nss_sss``) and SSSD responders (e.g. the
+NSS responder).
+
+All clients employ a request/response protocol using their own TLV-encoding.
+Note that the clients only support synchronous I/O so sending a request to
+the SSSD responder is a blocking operation -- it will await the response on
+the client side. The responder itself supports asynchronous I/O using `tevent`
+event library so it can serve multiple client's requests in parallel.
+
+UNIX Signals
+============
+
+All SSSD components listen to several standard signals. It is usually enough
+to send the signal to the main monitor process, which will then propagate it
+to other components.
 
 SIGTERM
-    If a responder or a provider process fails to send a ``pong``
-    message to the monitor process after receiving the ``ping`` message,
-    the monitor terminates the unresponsive process with a SIGTERM. Also
-    used to terminate helper processes (such as the krb5\_child process)
-    in case of a timeout.
+    Terminates a process gracefully.
+
 SIGKILL
     In cases where an unresponsive worker process does not terminate
-    after receiving SIGTERM, the monitor forcibly kills it with SIGILL
+    after receiving SIGTERM, the monitor forcibly kills it with SIGKILL.
+
 SIGUSR1
-    Can be handled a sssd\_be process individually or the monitor
-    process (in that case, the monitor re-sends the signal to all
-    sssd\_be processes it handles). Upon receiving this signal, the
-    sssd\_be process transitions into the 'offline' state. This signal
-    is mostly useful for testing.
+    Switch SSSD to offline state. This signal is mostly useful for testing. It
+    can be send to a single backend or to the monitor process. If it is recieved
+    by the monitor process then all backends are moved to the offline state.
+
 SIGUSR2
-    Similar to the SIGUSR1 signal, the SIGUSR2 would cause an sssd\_be
-    process to reset the offline status and retry the next request it
-    receives against a remote server.
+    This is similar to ``SIGUSR1``. It will reset the offline state, making
+    SSSD to reconnect to the remote server on next request.
+
 SIGHUP
-    Can be delivered to the sssd process. After receiving SIGHUP, the
-    monitor rotates its logfile and sends a ``reset`` method to the
-    managed processes. The managed processes also rotate logfiles. In
-    addition, the sssd\_be processes re-read resolv.conf and the
-    sssd\_nss process clears the fast in-memory cache.
-
-Local sockets
--------------
-
-After startup, the SSSD also creates several local (AF\_UNIX) sockets to
-listen on. These sockets are used by the NSS and PAM modules and also
-the external programs SSSD integrates with, such as sudo, OpenSSH or
-autofs. All consumers use the sockets in a similar fashion, so they can
-be commonly called SSS clients.
-
-The clients all employ a request/response protocol. using its own
-TLV-encoding. Note that the SSS clients only support synchronous I/O, so
-it may block (e.g. while waiting for a response). On the other hand, the
-responders supports asynchronous I/O using its tevent main loop, so it
-will not block (e.g. while waiting to read from a client).
-
-KDCInfo files
--------------
-
-The SSSD might discover additional KDC or Kadmin servers that are not
-defined in krb5.conf. However, it would still be prudent if tools like
-kinit or kpasswd could talk to the same servers the SSSD talks to. To
-this end, the SSSD implements a plugin for libkrb5, located in the
-`sssd\_krb5\_locator\_plugin.c <https://pagure.io/SSSD/sssd/blob/master/f/src/krb5_plugin/sssd_krb5_locator_plugin.c>`__
-file. When a new KDC is discovered, the sssd\_be process writes the IP
-address of this KDC into a file under the /var/lib/sss/pubconf
-directory. With the help of the locator plugin, libkrb5 is able to read
-these files in the pubconf directory and use the KDC servers discovered
-by the SSSD.
-
+    This signal can be send to the monitor only. It will cause log files
+    rotation and clearing in-memory caches. Please note that this signal is
+    commonly used to re-read service configuration, but SSSD does not support
+    this. To reload the configuration you must restart the service.
