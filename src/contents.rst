@@ -33,6 +33,9 @@ Table of Contents
    troubleshooting/basics
    troubleshooting/backend
    troubleshooting/sudo
+   troubleshooting/ad_provider
+   troubleshooting/ldap_provider
+   troubleshooting/ipa_provider
 
 .. toctree::
    :caption: Design Pages
