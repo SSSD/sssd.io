@@ -22,6 +22,7 @@ Table of Contents
    community
    docs/quick-start
    docs/introduction
+   docs/reporting-bugs
 
 .. toctree::
    :caption: Troubleshooting
