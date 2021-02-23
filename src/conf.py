@@ -42,6 +42,7 @@ extensions = [
     'sssd.io.directives.mermaid',
     'sssd.io.directives.poster',
     'sssd.io.directives.toctree',
+    'sssd.io.lexers',
 ]
 
 graphviz_output_format = 'svg'
