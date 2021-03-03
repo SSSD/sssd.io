@@ -33,6 +33,7 @@ Table of Contents
 
    troubleshooting/basics
    troubleshooting/backend
+   troubleshooting/fleet-commander
    troubleshooting/sudo
    troubleshooting/ad_provider
    troubleshooting/ldap_provider
