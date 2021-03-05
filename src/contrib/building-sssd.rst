@@ -1,12 +1,90 @@
 Building SSSD
 =============
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ac ligula et felis aliquam posuere. Etiam ac augue vel tortor porttitor placerat vitae ac libero. Nunc a efficitur lectus. Aliquam malesuada congue arcu quis luctus. Quisque pretium dolor orci, ut ullamcorper felis tincidunt eget. Duis auctor felis ut maximus facilisis. Nam eu feugiat tortor.
+Starting with SSSD 1.10 beta, we now include a set of helper aliases and
+environment variables in SSSD to simplify building development versions of
+SSSD on Fedora. To take advantage of them, use the following command:
 
-Morbi ornare, ligula et volutpat mollis, nibh ante consequat nisl, vel pulvinar est mi sit amet nibh. In consectetur sit amet nunc at elementum. Mauris cursus fringilla consequat. Nulla imperdiet posuere nunc ac bibendum. Suspendisse potenti. Fusce quis purus ornare, sodales libero id, porttitor nisi. Donec pellentesque iaculis lectus eget molestie. Phasellus eleifend ex a ipsum suscipit mollis. Aenean a aliquet elit. Pellentesque lobortis orci non enim mollis, sit amet dapibus ante rhoncus. Pellentesque quis volutpat metus, ullamcorper vulputate mi. Fusce dapibus porta efficitur. Aenean fringilla varius odio nec blandit. Nulla porttitor nisi velit, id suscipit lorem sagittis et. Ut non enim id augue varius laoreet.
+.. code-block:: bash
 
-Maecenas fermentum purus sed lacinia vestibulum. Quisque justo orci, fermentum eu massa quis, efficitur dapibus erat. Morbi tristique sem id erat ultricies, ut eleifend orci consequat. Vestibulum urna orci, pretium ut lectus quis, elementum fermentum tellus. Praesent ligula sem, consequat et efficitur eu, laoreet quis quam. Suspendisse nec lorem diam. Integer et dolor ligula. Curabitur dapibus mi quis commodo viverra. Donec ut efficitur ipsum. Integer at bibendum leo, a volutpat dolor. Cras ut pulvinar leo, in euismod libero. Vivamus nec laoreet sem. Cras hendrerit est sit amet diam vehicula scelerisque.
+    . /path/to/sssd-source/contrib/fedora/bashrc_sssd
 
-Etiam bibendum venenatis viverra. Aenean aliquet tortor diam, non fringilla enim luctus nec. Integer eros sem, sagittis vitae lectus ultrices, rhoncus sagittis ante. Interdum et malesuada fames ac ante ipsum primis in faucibus. Maecenas nec faucibus odio. Duis a placerat velit. Ut ac congue metus. Nunc ac enim convallis, condimentum ipsum id, mattis nulla. Maecenas quis consectetur nisi. Ut mi leo, dictum a nisi ut, cursus condimentum dolor. Aenean molestie diam quis justo aliquet fermentum. Quisque tellus turpis, luctus ut tempor vel, tincidunt bibendum augue. Maecenas vestibulum id dui et suscipit.
+To build SSSD from source, follow these steps:
 
-Nulla facilisi. Morbi venenatis tincidunt elit et efficitur. Praesent elementum ullamcorper sodales. Sed id justo id nisl tincidunt rhoncus. Nullam eleifend sit amet erat nec rhoncus. Proin id congue mi. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Mauris at arcu et nunc fermentum venenatis. Mauris ac efficitur purus, malesuada tristique nisi. Phasellus et fermentum dui, at dapibus ante. Duis efficitur iaculis arcu id accumsan. Sed sapien urna, placerat ut suscipit id, dignissim eget urna. Praesent eget risus fermentum, euismod nulla ut, maximus urna. Duis placerat risus at lorem accumsan fermentum. Nullam ultricies hendrerit euismod.
+- Install necessary tools:
+
+.. code-block:: bash
+
+    # When using yum
+    sudo yum -y install rpm-build yum-utils libldb-devel
+
+    # When using dnf
+    sudo dnf -y install rpm-build dnf-plugins-core libldb-devel
+
+- Create source rpm (run from git root directory):
+
+.. code-block:: bash
+
+    contrib/fedora/make_srpm.sh
+
+- Install SSSD dependencies:
+
+.. code-block:: bash
+
+    # When using yum
+    sudo yum-builddep rpmbuild/SRPMS/sssd-*.src.rpm
+
+    # When using dnf
+    sudo dnf builddep rpmbuild/SRPMS/sssd-*.src.rpm
+
+In rare cases SSSD dependencies packages may exist in system repository under
+different name. Sometimes additional repository needs to be added to the system
+for full SSSD dependencies resolution. In those rare cases autoconf script
+output will suggest package name developer should search for.
+
+Sidenote: If you plan on working with the SSSD source often, you may want to
+add the following to your ~/.bashrc file:
+
+.. code-block:: bash
+
+    if [ -f /path/to/sssd-source/contrib/fedora/bashrc_sssd ]; then
+        . /path/to/sssd-source/contrib/fedora/bashrc_sssd
+    fi
+
+- Produce a Debug build of SSSD (run from git root directory):
+
+.. code-block:: bash
+
+    reconfig && chmake
+
+- Install fresh build of SSSD into the system (this operation assumes that user
+  has "sudo" privilege). To install SSSD "sssinstall" alias is used:
+
+.. code-block:: bash
+
+    sssinstall && echo "Build install successful"
+
+Installation on other distributions is possible via standard autotools combo:
+
+.. code-block:: bash
+
+    autoreconf -i -f
+    ./configure --enable-nsslibdir=/lib64 --enable-pammoddir=/lib64/security
+    make
+    sudo make install
+
+Sidenote: By default autotools install prefix is "/usr/local". Default location
+for "nsslibdir" and "pammoddir" will be "/usr/local/lib64".
+32bit machines will search for SSSD libraries by default in "/usr/local/lib"
+which will result in broken NSS and PAM linking with SSSD. Advice here is to
+double check if SSSD install location will be visible for system linker.
+
+- Build RPM packages out of fresh build if needed
+
+.. code-block:: bash
+
+    make rpms
+
+    # For generating prerelease RPMs with date and git hash in package release
+    # we prepared special make target:
+    make prerelease-rpms
