@@ -7,7 +7,9 @@ Table of Contents
    :caption: Contribution
    :maxdepth: 0
 
+   contrib/contribution-policy
    contrib/get-source
+   contrib/github-workflow
    contrib/building-sssd
    contrib/code-fundamentals
    contrib/coding-style
