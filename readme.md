@@ -16,19 +16,29 @@ $ source .venv/bin/activate
 (.venv) $ pip3 install -r requirements.txt
 ```
 
-Note: To step out of the virtual environment, run `$ deactivate`.
+When finished working inside the virtual environment you can step out of it:
+
+```console
+(.venv) $ deactivate
+```
 
 ## Build it
-
+To build the project you need to be in the virtual environment.
 ```console
 (.venv) $ make html
 ```
 
-## View it
+Some changes may require a full project rebuild as documents are usually
+linked to each other:
+```console
+(.venv) $ make clean && make html
+```
 
+## View it
 ```console
 $ firefox _build/html/index.html
 ```
+You do not need to be in virtual environment to see the build result.
 
 ## Example page
 
@@ -39,7 +49,10 @@ can view it after the build is finished with:
 $ firefox _build/html/example.html
 ```
 
+An alternative is to use live lookup tools like [online reStructuredText editor].
+
 [sample page]: src/example.rst
+[online reStructuredText editor]: http://rst.ninjs.org/#
 
 ## Add new content
 
