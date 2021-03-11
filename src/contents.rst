@@ -28,6 +28,7 @@ Table of Contents
    docs/reporting-bugs
    docs/direct-ad.rst
    docs/manual-ad.rst
+   docs/ldap-ad.rst
    docs/pam_krb5_migration
 
 .. toctree::
