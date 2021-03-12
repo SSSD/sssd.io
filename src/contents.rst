@@ -14,6 +14,7 @@ Table of Contents
    contrib/code-fundamentals
    contrib/coding-style
    contrib/running-tests
+   contrib/bug-report
    contrib/mmap_cache
    contrib/ipc
 
