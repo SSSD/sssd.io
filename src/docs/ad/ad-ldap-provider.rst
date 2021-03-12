@@ -1,5 +1,5 @@
-Integrating Active Directory with LDAP provider
-###############################################
+LDAP provider with AD domain
+############################
 
 This describes how to configure SSSD to setup an Active Directory domain using
 ``id_provider = ldap``.
@@ -7,7 +7,7 @@ This describes how to configure SSSD to setup an Active Directory domain using
 .. note::
 
     The recommended way to join into an Active Directory domain is to use the
-    integrated AD provider (``id_provider = ad``). See :doc:`direct-ad` for
+    integrated AD provider (``id_provider = ad``). See :doc:`ad-provider` for
     more information.
 
     The only reason to use the ``ldap`` provider is if you do not want to

@@ -1,8 +1,5 @@
-Manual Active Directory Join
-##############################################
-
-Joining the GNU/Linux client to the AD domain manually
-******************************************************
+Joining AD Domain Manually
+##########################
 
 The manual process of joining the GNU/Linux client to the AD domain consists of several steps:
 
