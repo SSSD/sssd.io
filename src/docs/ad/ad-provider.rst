@@ -1,7 +1,7 @@
-Direct AD Integration
-#####################
+Joining AD Domain
+#################
 
-This page describes how to configure SSSD to authenticate with a Windows 2008 or later Domain Server using the Active Directory provider (``id_provider=ad``). The AD provider was introduced with SSSD 1.9.0. Follow :doc:`manual-ad` to join AD manually without realmd.
+This page describes how to configure SSSD to authenticate with a Windows 2008 or later Domain Server using the Active Directory provider (``id_provider=ad``). The AD provider was introduced with SSSD 1.9.0. Follow :doc:`ad-provider-manual` to join AD manually without realmd.
 
 Joining the GNU/Linux client using realmd (Recommended)
 *******************************************************
