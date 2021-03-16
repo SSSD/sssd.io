@@ -634,7 +634,7 @@ the tevent event loop using its ``tevent_add_signal`` call.
     the NSS Responder. Note that this mechanism is not used by the PAM
     Responder. Note also that this Fast Cache (memcache) is not considered
     part of the System Cache (sysdb). You can learn more about
-    the memory cache on a :doc:`dedicated page <mmap_cache_1.15>`.
+    the memory cache on a :doc:`dedicated page <mmap_cache>`.
 
 **Samba Libraries**
 ^^^^^^^^^^^^^^^^^^^
