@@ -8,9 +8,9 @@ Table of Contents
    :maxdepth: 0
 
    Introduction <contrib/introduction>
+   contrib/building-sssd
    contrib/get-source
    contrib/github-workflow
-   contrib/building-sssd
    contrib/coding-style
    contrib/running-tests
 

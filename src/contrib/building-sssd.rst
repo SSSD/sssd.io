@@ -1,90 +1,91 @@
 Building SSSD
-=============
+#############
 
-Starting with SSSD 1.10 beta, we now include a set of helper aliases and
-environment variables in SSSD to simplify building development versions of
-SSSD on Fedora. To take advantage of them, use the following command:
+SSSD is using `autoconf`_ and `automake`_ build systems. If you are not familiar
+with these tools, below are the commands you need to execute in order to
+configure and build the project.
 
-.. code-block:: bash
+.. _autoconf: https://www.gnu.org/software/autoconf
+.. _automake: https://www.gnu.org/software/automake
 
-    . /path/to/sssd-source/contrib/fedora/bashrc_sssd
+.. code-block:: console
 
-To build SSSD from source, follow these steps:
+    [sssd]$ autoreconf -if
+    [sssd]$ ./configure --enable-nsslibdir=/lib64 --enable-pammoddir=/lib64/security --enable-silent-rules
+    [sssd]$ make
 
-- Install necessary tools:
+The ``autoreconf`` command will create a ``configure`` script. This script
+allows you to modify the resulting build with several flags, it also makes sure
+that all required dependencies are available. SSSD requires lots of build
+dependencies that helps us integrate with the identity and authentication
+systems. Your system may not have all necessary dependencies installed. In such
+case, the ``configure`` script will end up with error that will tell you what is
+missing. Re-run the script after you install the dependency.
 
-.. code-block:: bash
+.. note::
 
-    # When using yum
-    sudo yum -y install rpm-build yum-utils libldb-devel
+    Run ``./configure --help`` to list all available ``configure`` options.
 
-    # When using dnf
-    sudo dnf -y install rpm-build dnf-plugins-core libldb-devel
+Some distributions provide a way to quickly install a package's build
+dependencies with a single command. If your distributions supports it, you can
+install them all at once with:
 
-- Create source rpm (run from git root directory):
+.. code-tabs::
 
-.. code-block:: bash
+    .. fedora-tab::
 
-    contrib/fedora/make_srpm.sh
+        dnf builddep sssd
 
-- Install SSSD dependencies:
+    .. ubuntu-tab::
 
-.. code-block:: bash
+        apt-get build-dep sssd
 
-    # When using yum
-    sudo yum-builddep rpmbuild/SRPMS/sssd-*.src.rpm
-
-    # When using dnf
-    sudo dnf builddep rpmbuild/SRPMS/sssd-*.src.rpm
-
-In rare cases SSSD dependencies packages may exist in system repository under
-different name. Sometimes additional repository needs to be added to the system
-for full SSSD dependencies resolution. In those rare cases autoconf script
-output will suggest package name developer should search for.
-
-Sidenote: If you plan on working with the SSSD source often, you may want to
-add the following to your ~/.bashrc file:
+There are additional `make` targets available, such as `rpms` or
+`prerelease-rpms` that you may find useful.
 
 .. code-block:: bash
 
-    if [ -f /path/to/sssd-source/contrib/fedora/bashrc_sssd ]; then
-        . /path/to/sssd-source/contrib/fedora/bashrc_sssd
-    fi
-
-- Produce a Debug build of SSSD (run from git root directory):
-
-.. code-block:: bash
-
-    reconfig && chmake
-
-- Install fresh build of SSSD into the system (this operation assumes that user
-  has "sudo" privilege). To install SSSD "sssinstall" alias is used:
-
-.. code-block:: bash
-
-    sssinstall && echo "Build install successful"
-
-Installation on other distributions is possible via standard autotools combo:
-
-.. code-block:: bash
-
-    autoreconf -i -f
-    ./configure --enable-nsslibdir=/lib64 --enable-pammoddir=/lib64/security
-    make
-    sudo make install
-
-Sidenote: By default autotools install prefix is "/usr/local". Default location
-for "nsslibdir" and "pammoddir" will be "/usr/local/lib64".
-32bit machines will search for SSSD libraries by default in "/usr/local/lib"
-which will result in broken NSS and PAM linking with SSSD. Advice here is to
-double check if SSSD install location will be visible for system linker.
-
-- Build RPM packages out of fresh build if needed
-
-.. code-block:: bash
-
+    # Build RPM packages
     make rpms
 
-    # For generating prerelease RPMs with date and git hash in package release
-    # we prepared special make target:
+    # Build RPM packages with prerelease version tag (date and git hash)
     make prerelease-rpms
+
+Development scripts
+===================
+
+SSSD provide a set of helper aliases and scripts to simplify building of
+developments versions. These scripts are currently only available for Fedora.
+You can start using them by sourcing the `bashrc_sssd`.
+
+.. code-block:: console
+
+    [sssd]$ source ./contrib/fedora/bashrc_sssd
+
+.. note::
+
+    If you plan to work on SSSD regularly, you may want to include the script
+    in your `~/.bashrc` file:
+
+    .. code-block:: bash
+
+        if [ -f /path/to/sssd-source/contrib/fedora/bashrc_sssd ]; then
+            . /path/to/sssd-source/contrib/fedora/bashrc_sssd
+        fi
+
+Usage
+*****
+
+* Produce a debug build of SSSD and run unit tests (run from git root
+  directory):
+
+.. code-block:: console
+
+    [sssd]$ reconfig && chmake
+
+* Install fresh build of SSSD into the system (this operation assumes that user
+  has "sudo" privilege). To install SSSD "sssinstall" alias is used:
+
+.. code-block:: console
+
+    [sssd]$ sssinstall && echo "Build install successful"
