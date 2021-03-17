@@ -11,12 +11,23 @@ Table of Contents
    contrib/get-source
    contrib/github-workflow
    contrib/building-sssd
-   contrib/code-fundamentals
    contrib/coding-style
    contrib/running-tests
+
+.. toctree::
+   :caption: Fundamentals
+   :maxdepth: 0
+
+   contrib/code-fundamentals
+
+.. toctree::
+   :caption: Under the hood
+   :maxdepth: 0
+
    contrib/mmap_cache
    contrib/ipc
    contrib/internals
+
 
 .. toctree::
    :caption: Documentation
