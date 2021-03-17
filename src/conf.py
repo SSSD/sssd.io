@@ -70,10 +70,16 @@ html_theme = 'sssd.io'
 # so a file named "default.css" will overwrite the builtin "default.css".
 # html_static_path = ['_static']
 
+toc_contrib = [
+    'Contribution',
+    'Fundamentals',
+    'Under the hood'
+]
+
 html_theme_options = {
     'toc_pattern': {
-        'contrib/*': ['Contribution'],
-        '*': ['!Contribution']
+        'contrib/*': toc_contrib,
+        '*': [f'!{x}' for x in toc_contrib],
     },
     'design_page_path': 'design-pages/pages'
 }
