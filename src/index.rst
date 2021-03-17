@@ -54,7 +54,7 @@ SSSD - System Security Services Daemon
    .. poster-hint::
       :title: Contribute
       :link-title: Contribute to SSSD
-      :link: contrib/get-source
+      :link: contrib/introduction
       :icon: ./_static/images/icon-contribute.svg
 
       Are you a developer and want to help improve the

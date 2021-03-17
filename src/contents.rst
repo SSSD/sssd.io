@@ -7,7 +7,7 @@ Table of Contents
    :caption: Contribution
    :maxdepth: 0
 
-   contrib/contribution-policy
+   Introduction <contrib/introduction>
    contrib/get-source
    contrib/github-workflow
    contrib/building-sssd
