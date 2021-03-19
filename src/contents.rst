@@ -9,7 +9,6 @@ Table of Contents
 
    Introduction <contrib/introduction>
    contrib/building-sssd
-   contrib/get-source
    contrib/github-workflow
    contrib/coding-style
    contrib/running-tests
@@ -92,6 +91,6 @@ Table of Contents
    :maxdepth: 0
    :hidden:
 
-   Contribute <contrib/get-source>
+   Contribute <contrib/introduction>
    Learn <docs/introduction>
    Community <community>
