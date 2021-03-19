@@ -9,7 +9,6 @@ Table of Contents
 
    Introduction <contrib/introduction>
    contrib/building-sssd
-   contrib/github-workflow
    contrib/coding-style
    contrib/running-tests
 
