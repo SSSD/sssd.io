@@ -43,6 +43,7 @@ extensions = [
     'sssd.io.directives.poster',
     'sssd.io.directives.toctree',
     'sssd.io.lexers',
+    'sssd.io.roles.tag',
 ]
 
 graphviz_output_format = 'svg'
