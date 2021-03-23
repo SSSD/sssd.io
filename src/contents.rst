@@ -26,6 +26,7 @@ Table of Contents
    contrib/mmap_cache
    contrib/ipc
    contrib/internals
+   contrib/cache_req
 
 .. toctree::
    :caption: Design Pages
