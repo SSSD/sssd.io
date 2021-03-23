@@ -16,6 +16,7 @@ Table of Contents
    :caption: Fundamentals
    :maxdepth: 0
 
+   Architecture <contrib/architecture>
    contrib/code-fundamentals
 
 .. toctree::
