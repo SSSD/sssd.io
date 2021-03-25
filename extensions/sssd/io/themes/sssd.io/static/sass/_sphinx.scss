@@ -164,8 +164,14 @@
     }
 
     .mermaid {
-        margin: 2rem;
-        text-align: center;
+        & {
+            margin: 2rem;
+            text-align: center;
+        }
+
+        svg {
+            height: 100%;
+        }
     }
 
     ul p, ol p {
