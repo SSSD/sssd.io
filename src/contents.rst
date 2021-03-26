@@ -17,6 +17,7 @@ Table of Contents
    :maxdepth: 0
 
    Architecture <contrib/architecture>
+   Memory allocator <contrib/talloc>
 
 .. toctree::
    :caption: Under the hood
