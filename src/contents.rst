@@ -17,7 +17,6 @@ Table of Contents
    :maxdepth: 0
 
    Architecture <contrib/architecture>
-   contrib/code-fundamentals
 
 .. toctree::
    :caption: Under the hood
