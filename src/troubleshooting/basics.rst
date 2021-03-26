@@ -17,7 +17,7 @@ On Fedora/RHEL, debug logs are stored under ``/var/log/sssd``. There is one log 
 Troubleshooting Identity Information
 ************************************
 
-Before diving into the SSSD logs and config files it is very beneficial to know what the `SSSD request flow <https://jhrozek.wordpress.com/2015/03/11/anatomy-of-sssd-user-lookup/>`_ looks like. For even more in-depth information on SSSD's architecture, refer to `Pavel Brezina's thesis <https://is.muni.cz/th/359290/fi_m/thesis.pdf>`_. Please note the examples of the ``DEBUG`` messages are subject to change in future SSSD versions.
+Before diving into the SSSD logs and config files it is very beneficial to know what the :doc:`../contrib/architecture` looks like. Please note the examples of the ``DEBUG`` messages are subject to change in future SSSD versions.
 
 General tips
 ============
