@@ -280,6 +280,11 @@
             margin-top: 0;
         }
 
+        & > ul, & > ol {
+            padding-left: 3rem !important;
+            padding-right: 3rem !important;
+        }
+
         & > *:last-child {
             margin-bottom: 0;
         }
