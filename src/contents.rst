@@ -34,6 +34,7 @@ Table of Contents
    community
    docs/quick-start
    docs/introduction
+   Architecture <docs/architecture>
    docs/reporting-bugs
 
 .. toctree::

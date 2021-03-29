@@ -9,7 +9,7 @@ various inter-process communication techniques. The following diagram gives you
 a basic understanding about the components and their relations. The components
 are described in more detail below the diagram.
 
-.. image:: architecture.svg
+.. image:: /contrib/architecture.svg
     :height: 700px
     :align: center
 
@@ -122,7 +122,7 @@ interface therefore all lookups share the basic algorithm regardless of the
 object type. The following diagram can give you a basic understanding of how the
 lookup is performed.
 
-.. image:: architecture-lookup.svg
+.. image:: /contrib/architecture-lookup.svg
     :height: 700px
     :align: center
 
