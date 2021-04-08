@@ -14,7 +14,7 @@ the 2.0 release. It is assumed that the reader is already familiar with
 the external usage of SSSD. The intended audience of this document are
 new contributors to the SSSD project. This document is not intended to be
 comprehensive. For additional details on specific features, please refer
-to the various :doc:`../design-pages/list`.
+to the various :doc:`list-design-pages`.
 
 This document does not discuss the details of building, installing,
 and debugging SSSD. More information on these topics can be found in the
@@ -612,7 +612,7 @@ the tevent event loop using its ``tevent_add_signal`` call.
     is only used to store non-critical and often changing attributes such
     as timestamps so that if entry itself does not change, updating the
     entry with just new timestamps does not cause a disk write.
-    You can learn more about this optimization technique in the :doc:`timestamp cache design page <../design-pages/pages/one_fourteen_performance_improvements>`.
+    You can learn more about this optimization technique in the :doc:`timestamp cache design page <../design-pages/one_fourteen_performance_improvements>`.
     The sysdb is written to by the Backend, and read by
     the Responders. Even though this is a per-domain database, it is
     sometimes referred to generally as the System Cache. Since our use
@@ -879,9 +879,9 @@ concept of subdomains also applies to groups.
 
 Please note that a subdomain typically requires that the name coming
 from the client request is fully qualified. This can be configured
-though. Please refer to the :doc:`subdomains configuration <../design-pages/pages/subdomain_configuration>`,
-the :doc:`short name configuration <../design-pages/pages/shortnames>`
-and the (a bit outdated) :doc:`subdomains <../design-pages/pages/subdomains>`
+though. Please refer to the :doc:`subdomains configuration <../design-pages/subdomain_configuration>`,
+the :doc:`short name configuration <../design-pages/shortnames>`
+and the (a bit outdated) :doc:`subdomains <../design-pages/subdomains>`
 design pages for more details.
 
 Global Catalog (GC)
@@ -896,9 +896,9 @@ lookup users and groups. Note that the GC is essentially an LDAP server
 running on a non-standard port.
 
 More information can be found in the :doc:`original GC support design
-page <../design-pages/pages/global_catalog_lookups>` and also in another
+page <../design-pages/global_catalog_lookups>` and also in another
 design page that deals with :doc:`detecting POSIX attributes in GC
-<../design-pages/pages/posix_attrs_detection>`.
+<../design-pages/posix_attrs_detection>`.
 
 PAC Responder
 ^^^^^^^^^^^^^

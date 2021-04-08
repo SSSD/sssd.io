@@ -7,4 +7,4 @@ List of design pages
     :local:
     :glob:
 
-    pages/*
+    ../design-pages/*

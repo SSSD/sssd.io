@@ -4,7 +4,7 @@ Troubleshooting Fleet Commander
 This document contains common issues of Fleet Commander integration with SSSD.
 Please, refer to the `Fleet Commander`_ project documentation for general issues
 that are not related to the SSSD project. You can also read the
-:doc:`../design-pages/pages/fleet_commander_integration` design page to get a
+:doc:`../design-pages/fleet_commander_integration` design page to get a
 better understanding of the SSSD role and how the integration works under the
 hood.
 

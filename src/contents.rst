@@ -27,6 +27,13 @@ Table of Contents
    contrib/ipc
    contrib/internals
 
+.. toctree::
+   :caption: Design Pages
+   :maxdepth: 0
+   :titlesonly:
+
+   contrib/writing-design-page
+   contrib/list-design-pages
 
 .. toctree::
    :caption: Documentation
@@ -77,13 +84,6 @@ Table of Contents
    troubleshooting/ad_provider
    troubleshooting/ldap_provider
    troubleshooting/ipa_provider
-
-.. toctree::
-   :caption: Design Pages
-   :maxdepth: 0
-
-   design-pages/how-to-write.rst
-   design-pages/list.rst
 
 .. Main menu at the top of the page.
    It is important to keep it as the last navigation.

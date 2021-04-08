@@ -73,13 +73,15 @@ html_theme = 'sssd.io'
 toc_contrib = [
     'Contribution',
     'Fundamentals',
-    'Under the hood'
+    'Under the hood',
+    'Design Pages'
 ]
 
 html_theme_options = {
     'toc_pattern': {
         'contrib/*': toc_contrib,
+        'design-pages/*': toc_contrib,
         '*': [f'!{x}' for x in toc_contrib],
     },
-    'design_page_path': 'design-pages/pages'
+    'design_page_path': 'design-pages'
 }

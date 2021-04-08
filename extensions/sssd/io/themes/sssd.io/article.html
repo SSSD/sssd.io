@@ -9,7 +9,7 @@
             <aside class="last-update">
                 {%- if gitstamp %}This page was last updated on {{ gitstamp }}.{%- endif %}
             </aside>
-            {% if theme_design_page_path in pagename %}
+            {% if pagename.startswith(theme_design_page_path) %}
             <div class="admonition warning">
                 <p class="admonition-title">Warning</p>
                 <p>
