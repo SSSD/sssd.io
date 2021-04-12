@@ -22,10 +22,15 @@ class CodeTabs(HTMLDirective):
     option_spec = {
         'name': directives.unchanged,
         'caption': directives.unchanged,
+        'short': directives.flag,
     }
 
     def run(self):
         node = docutils.nodes.container(classes=['code-tabs'])
+
+        if 'short' in self.options:
+            node['classes'].append('short')
+
         if 'name' in self.options:
             # If 'name' option is set, add it to the node and use it as id.
             self.add_name(node)
@@ -47,13 +52,45 @@ class CodeTabs(HTMLDirective):
                 </div>
                 '''.format(**{
                     'caption': self.options['caption'],
-                    'id': anchor
+                    'id': anchor,
                 })
             ))
             node.append(caption)
 
         self.state.nested_parse(self.content, self.content_offset, node)
         return [node]
+
+
+class PlainTab(HTMLDirective):
+    has_content = True
+
+    option_spec = {
+        'label': directives.unchanged_required,
+        'label-class': directives.unchanged,
+        **CodeBlock.option_spec
+    }
+
+    def run(self):
+        builder = self.env.app.builder
+        if builder.name != 'html':
+            raise NotImplementedError('Only html builder is supported')
+
+        node = docutils.nodes.container(classes=['plain-tab'])
+        self.state.nested_parse(self.content, self.content_offset, node)
+        block = nodes_to_html(self.env.app.builder, [node])
+
+        return [docutils.nodes.raw(format='html', text=textwrap.dedent(
+            '''
+            <div class="code-tab" data-label="{label}">
+                <div class="code-tab-label {label-class}" data-label="{label}">{label}</div>
+                {block}
+            </div>
+            '''.format(**{
+                'block': block,
+                'label': self.options.get('label'),
+                'label-class': self.options.get('label-class', '')
+            })
+        ))]
 
 
 class CodeTab(CustomCodeBlock):
@@ -132,6 +169,7 @@ def setup(app):
 
     app.add_directive("code-tabs", CodeTabs)
     app.add_directive("code-tab", CodeTab)
+    app.add_directive("plain-tab", PlainTab)
     app.add_directive("fedora-tab", FedoraCodeTab)
     app.add_directive("rhel-tab", RHELCodeTab)
     app.add_directive("ubuntu-tab", UbuntuCodeTab)

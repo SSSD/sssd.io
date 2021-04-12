@@ -55,6 +55,10 @@
             margin: 1rem 0;
         }
 
+        &.short .code-tab {
+            max-height: 30rem;
+        }
+
         .code-tabs-labels {
             display: flex;
         }
@@ -103,6 +107,7 @@
 
         .code-tab {
             display: none;
+            overflow-y: auto;
         }
 
         .code-tab.active {
