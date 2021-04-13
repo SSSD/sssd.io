@@ -41,7 +41,6 @@ Table of Contents
    :caption: Documentation
    :maxdepth: 0
 
-   community
    docs/quick-start
    docs/introduction
    Architecture <docs/architecture>

@@ -134,6 +134,65 @@
             filter: hue-rotate(180deg) saturate(3);
         }
     }
+
+    .poster-hints.poster-community {
+        & {
+            background-image: url("../images/poster.jpeg");
+            background-position: left center;
+            color: $poster-text-color;
+            padding: 2rem 0;
+        }
+
+        h2 {
+            color: $color-main;
+        }
+
+        section {
+            width: 16.5rem;
+        }
+
+        p {
+            margin-top: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        a, a:link, a:visited {
+            color: $color-main;
+            font-weight: bold;
+        }
+
+        a:hover, a:active {
+            color: $color-main-active;
+        }
+    }
+
+    .community-bug {
+        & {
+            text-align: center;
+            font-size: 1.5rem;
+            background-image: url("../images/icon-bug.svg");
+            background-repeat: no-repeat;
+            background-position: 0.5rem center;
+            background-color: #fffadb;
+            margin: 3rem auto;
+            max-width: 46rem;
+            padding: 1rem 1rem 1rem 3.5rem;
+        }
+
+        a:link, a:visited {
+            color: $article-link-color;
+        }
+
+        a:hover, a:active {
+            color: $article-link-active-color;
+        }
+    }
+
+    .community-text {
+        margin: 3rem auto;
+        max-width: 46rem;
+        font-size: 1.5rem;
+    }
 }
 
 @media (max-width: $poster-breakpoint) {

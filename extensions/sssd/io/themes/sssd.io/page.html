@@ -1,6 +1,6 @@
 {%- extends "layout.html" %}
 {% block body %}
-    {% if pagename == 'index' %}
+    {% if pagename in theme_index_pages %}
         {% include "index.html" %}
     {% else %}
         {% include "article.html" %}

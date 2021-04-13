@@ -83,5 +83,9 @@ html_theme_options = {
         'design-pages/*': toc_contrib,
         '*': [f'!{x}' for x in toc_contrib],
     },
-    'design_page_path': 'design-pages'
+    'design_page_path': 'design-pages',
+    'index_pages': {
+        'index',
+        'community',
+    }
 }

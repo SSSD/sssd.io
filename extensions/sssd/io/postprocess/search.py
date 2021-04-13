@@ -42,6 +42,7 @@ def build_search_index(app, exception):
 
     build_dir = app.builder.outdir
     exclude_pages = [
+        'community.html',
         'contents.html',
         'example.html',
         'genindex.html',
