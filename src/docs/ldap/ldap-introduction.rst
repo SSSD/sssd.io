@@ -3,11 +3,11 @@ Introduction to LDAP Integration
 
 The LDAP Protocol is a well known cross platform protocol implemented in various LDAP server software components in small to enterprise level environments. SSSD on Linux clients is able to consume LDAP information with LDAP servers on Linux clients using the traditional SSSD LDAP provider. SSSD can use LDAP information for identity and authentication operations.
 
-SSSD strives to work well with multiple RFC-conforming (*rfc2307bis*, *rfc2307*) LDAP server implementations such as 389-ds-base, OpenLDAP, Windows Active Directory, and several others. LDAP provider features include, not limited to 
+SSSD strives to work well with multiple RFC-conforming (*rfc2307bis*, *rfc2307*) LDAP server implementations such as 389-ds-base, OpenLDAP, Windows Active Directory, and several others. LDAP provider features include, not limited to
 
 * SASL/SSL/TLS suport
 * LDAP Service discovery
-* Control search behavior with search base customization and nesting level 
+* Control search behavior with search base customization and nesting level
 * Paging configurable options
 * LDAP Access filters
 * SUDO LDAP support
@@ -15,7 +15,7 @@ SSSD strives to work well with multiple RFC-conforming (*rfc2307bis*, *rfc2307*)
 
 .. note::
 
-    Client side support for features is dependent on server side support
+    Client side support for features is dependent on server side support.
 
 To read more about how SSSD is used in LDAP integration at a high level, refer to the following links:
 
