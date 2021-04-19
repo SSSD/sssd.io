@@ -3,7 +3,7 @@ import textwrap
 import docutils
 import sphinx.util.docutils
 
-from .utils import HTMLDirective
+from .utils import HTMLDirective, nodes_to_html
 
 
 class Poster(HTMLDirective):
@@ -51,8 +51,15 @@ class Poster(HTMLDirective):
 class PosterHintsContainer(sphinx.util.docutils.SphinxDirective):
     has_content = True
 
+    option_spec = {
+        'class': docutils.parsers.rst.directives.unchanged,
+    }
+
     def run(self):
-        node = docutils.nodes.container(ids=['hints'])
+        node = docutils.nodes.container(classes=['poster-hints'])
+        if 'class' in self.options:
+            node['classes'].append(self.options['class'])
+
         self.state.nested_parse(self.content, self.content_offset, node)
         return [node]
 
@@ -68,24 +75,30 @@ class PosterHintElement(HTMLDirective):
     }
 
     def run(self):
-        return [docutils.nodes.raw(format='html', text=textwrap.dedent(
-            '''
-            <section>
-                <a href="{link}" title="{link-title}" style="background-image: url('{icon}');">
-                    <h2>{title}</h2>
-                    <p>
-                        {content}
-                    </p>
-                </a>
+        content_node = docutils.nodes.container(classes=['poster-hint-content'])
+        self.state.nested_parse(self.content, self.content_offset, content_node)
+        content_html = nodes_to_html(self.env.app.builder, [content_node])
+
+        html = '''
+            <section style="background-image: url('{icon}');">
+                <h2>{title}</h2>
+                {content}
             </section>
-            '''.format(**{
+        '''
+
+        if self.options.get('link', ''):
+            html = '<a href="{link}" title="{link-title}">' + html + '</a>'
+
+        return [docutils.nodes.raw(
+            format='html',
+            text=textwrap.dedent(html).format(**{
                 'icon': self.options.get('icon', ''),
                 'link': self.env.app.builder.get_relative_uri(self.env.docname, self.options.get('link', '')),
                 'link-title': self.options.get('link-title', ''),
                 'title': self.options.get('title', ''),
-                'content': '\n'.join(self.content) if self.content else '',
+                'content': content_html,
             })
-        ))]
+        )]
 
 
 def setup(app):

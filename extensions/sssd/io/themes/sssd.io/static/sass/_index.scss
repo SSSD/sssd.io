@@ -82,7 +82,7 @@
         }
     }
 
-    #hints {
+    .poster-hints {
         & {
             @extend .flex-hcenter;
             flex-wrap: wrap;
@@ -93,26 +93,10 @@
                 width: 12.5rem;
                 margin: 2rem 2rem 4rem 2rem;
                 text-align: center;
-            }
-
-            a {
-                & {
-                    display: block;
-                    background-size: 8rem;
-                    background-position: center top;
-                    background-repeat: no-repeat;
-                    margin: 0;
-                    padding: 8rem 0 0 0;
-                }
-
-                &:link, &:visited {
-                    color: $hints-text-color;
-                }
-
-                &:hover, &:active {
-                    color: $hints-active-color;
-                    filter: hue-rotate(180deg) saturate(3);
-                }
+                background-size: 8rem;
+                background-position: center top;
+                background-repeat: no-repeat;
+                padding: 8rem 0 0 0;
             }
 
             h2 {
@@ -127,6 +111,27 @@
                 line-height: 1.5rem;
                 text-align: left;
             }
+        }
+    }
+
+    .poster-hints.poster-index {
+        > a {
+            & {
+                display: block;
+            }
+
+            &:link, &:visited {
+                color: $hints-text-color;
+            }
+
+            &:active {
+                color: $hints-active-color;
+            }
+        }
+
+        section:hover, section:active {
+            color: $hints-active-color;
+            filter: hue-rotate(180deg) saturate(3);
         }
     }
 }
@@ -162,7 +167,7 @@
 }
 
 @media (max-width: $hints-breakpoint) {
-    #hints {
+    .poster-hints {
         & {
             justify-content: space-evenly;
         }

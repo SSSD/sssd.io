@@ -16,6 +16,7 @@ SSSD - System Security Services Daemon
 
 
 .. poster-hints::
+   :class: poster-index
 
    .. poster-hint::
       :title: Start
