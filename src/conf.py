@@ -89,3 +89,9 @@ html_theme_options = {
         'community',
     }
 }
+
+# Exclude certain pages if fast build is required
+if os.environ.get('FASTBUILD', None) == "yes":
+    exclude_patterns = [
+        'design-pages/*'
+    ]
