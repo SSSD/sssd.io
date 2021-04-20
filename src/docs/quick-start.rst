@@ -1,6 +1,5 @@
-===========
-Quick Start
-===========
+Quick Start Guide
+#################
 
 This page provides brief instructions to configure SSSD with FreeIPA, AD, and LDAP.
 
