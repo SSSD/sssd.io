@@ -15,6 +15,9 @@ def _parse_page(path):
     s_title = soup.select_one('#page-content article h1')
     s_hunks = soup.select(', '.join(selectors))
 
+    if s_title is None:
+        return (None, None)
+
     title = s_title.text
     hunk = '\n'.join([x.text for x in s_hunks])
 
@@ -57,6 +60,9 @@ def build_search_index(app, exception):
             continue
 
         (title, hunk) = _parse_page(path)
+        if not title:
+            continue
+
         docs.append({'path': relpath, 'title': title, 'hunk': hunk})
 
     index = _build_index(docs)
