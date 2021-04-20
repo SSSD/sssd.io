@@ -41,7 +41,9 @@ class Poster(HTMLDirective):
                 'project': self.options.get('project', ''),
                 'github-uri': self.options.get('github-uri', ''),
                 'content': '\n'.join(self.content) if self.content else '',
-                'download-uri': self.options.get('download-uri', ''),
+                'download-uri': self.env.app.builder.get_relative_uri(
+                    self.env.docname, self.options.get('download-uri', '')
+                ),
             })
         ))]
 
