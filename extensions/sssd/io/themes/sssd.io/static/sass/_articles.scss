@@ -105,6 +105,32 @@
             border-top: 0.0625rem dotted $prevnext-delimiter-color;
         }
     }
+
+    .release-list {
+        & {
+            width: 90%;
+            margin: auto auto;
+        }
+
+        th, td {
+            text-align: left;
+        }
+
+        td {
+            width: 15%;
+            font-family: monospace;
+        }
+
+        td:nth-child(2) {
+            font-weight: bold;
+        }
+
+        td:last-child {
+            @extend .font-content;
+            width: 70%;
+
+        }
+    }
 }
 
 #hamburger-menu {

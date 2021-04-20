@@ -41,6 +41,7 @@ extensions = [
     'sssd.io.directives.codetabs',
     'sssd.io.directives.mermaid',
     'sssd.io.directives.poster',
+    'sssd.io.directives.releases',
     'sssd.io.directives.toctree',
     'sssd.io.lexers',
     'sssd.io.roles.tag',
@@ -77,11 +78,17 @@ toc_contrib = [
     'Design Pages'
 ]
 
+toc_releases = [
+    'Release Notes'
+]
+
 html_theme_options = {
     'toc_pattern': {
         'contrib/*': toc_contrib,
         'design-pages/*': toc_contrib,
-        '*': [f'!{x}' for x in toc_contrib],
+        'releases': toc_releases,
+        'release-notes/*': toc_releases,
+        '*': [f'!{x}' for x in toc_contrib + toc_releases],
     },
     'design_page_path': 'design-pages',
     'index_pages': {

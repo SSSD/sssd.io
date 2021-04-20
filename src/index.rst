@@ -7,7 +7,7 @@ SSSD - System Security Services Daemon
    :first-line: Open Source Client for
    :second-line: Enterprise Identity Management
    :project: SSSD
-   :download-uri: content
+   :download-uri: releases
    :github-uri: https://github.com/SSSD/sssd
 
    Enroll your Linux machine into an Active Directory, FreeIPA or LDAP domain.

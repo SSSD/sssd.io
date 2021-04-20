@@ -37,6 +37,15 @@ Table of Contents
    contrib/list-design-pages
 
 .. toctree::
+   :caption: Release Notes
+   :maxdepth: 0
+   :titlesonly:
+   :glob:
+
+   releases
+   release-notes/*
+
+.. toctree::
    :caption: Documentation
    :maxdepth: 0
 

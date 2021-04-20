@@ -105,7 +105,7 @@ If you want to use short names, edit ``sssd.conf`` and set ``use_fully_qualified
 
 .. note::
 
-    In the event of user name conflict, jsmith@sssd.io, jsmith@child.sssd.io for example, you can configure a domain resolution order using shortnames. :doc:`short names <../design-pages/pages/shortnames>`. If that does not work, checkout ``sss_overide`` which is part of the ``sssd_tools`` package to create a local override. Of course it's best to resolve the conflict.
+    In the event of user name conflict, jsmith@sssd.io, jsmith@child.sssd.io for example, you can configure a domain resolution order using shortnames. :doc:`short names <../design-pages/shortnames>`. If that does not work, checkout ``sss_overide`` which is part of the ``sssd_tools`` package to create a local override. Of course it's best to resolve the conflict.
 
 .. code-block:: text
 
