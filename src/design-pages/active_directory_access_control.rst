@@ -1,7 +1,5 @@
-.. highlight:: none
-
-Adding the ``ad_access_filter`` option
-======================================
+Adding the ad_access_filter option
+==================================
 
 Related ticket(s):
 
