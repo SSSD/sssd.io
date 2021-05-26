@@ -27,7 +27,7 @@ Community
         :title: IRC
         :icon: ./_static/images/icon-irc.svg
 
-        We use the **#sssd** channel on `freenode.net <https://freenode.net>`_.
+        We use the **#sssd** channel on `libera.chat <https://libera.chat>`_.
 
         Feel free to ask both user and contributor questions.
 

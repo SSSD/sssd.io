@@ -303,7 +303,7 @@ Most of the sudo related user cases that we have in past years was
 actually only a misconfiguration of sudo rule or the client system. If
 you are not able to track down the issue yourself, feel free to ask one
 of the developers on `SSSD mailing list`_ or `#sssd IRC channel`_ on
-`freenode`_. To speed things up, please prepare the following information:
+`libera.chat`_. To speed things up, please prepare the following information:
 
 -  Description of the problem and what have you found out. You should at
    least know whether the issue lies on sudo (rules are send to sudo but
@@ -315,8 +315,8 @@ of the developers on `SSSD mailing list`_ or `#sssd IRC channel`_ on
    membership, output of the following commands:
 
 .. _SSSD mailing list: https://lists.fedorahosted.org/archives/list/sssd-devel@lists.fedorahosted.org
-.. _#sssd IRC channel: irc://irc.freenode.net/sssd
-.. _freenode: http://freenode.net
+.. _#sssd IRC channel: irc://irc.libera.chat/sssd
+.. _libera.chat: https://libera.chat
 
 .. code-block:: bash
 
