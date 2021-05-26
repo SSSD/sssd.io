@@ -76,14 +76,14 @@ This has the advantage of not having to restart the sssd, on the other hand, the
 Mind your privacy
 *****************
 
-Both the SSSD log files and the coredumps might include confidential information. If you don't like them to be exposed in the SSSD bug tracker instance, please contact some of the SSSD developers on the ``#sssd`` channel on FreeNode or on the `sssd-users <https://lists.fedorahosted.org/archives/list/sssd-users@lists.fedorahosted.org>`_ mailing list.
+Both the SSSD log files and the coredumps might include confidential information. If you don't like them to be exposed in the SSSD bug tracker instance, please contact some of the SSSD developers on the ``#sssd`` channel on libera.chat or on the `sssd-users <https://lists.fedorahosted.org/archives/list/sssd-users@lists.fedorahosted.org>`_ mailing list.
 
 Always test the latest available version
 ****************************************
 
 SSSD moves at a rapid pace. It's not useful to file a bug report against an old version, please upgrade to the latest release in the branch you're running, if the branch is still active. You can find the tarballs on our releases page. If you're running an Enterprise or Long-Term-Maintenance distribution and can't update to a newer version, consider filing a bug report in your distribution bug tracker instead.
 
-Alternatively, ask on the ``#sssd`` channel on FreeNode. Several SSSD or FreeIPA developers maintain private repositories with custom builds for stable platforms.
+Alternatively, ask on the ``#sssd`` channel on libera.chat. Several SSSD or FreeIPA developers maintain private repositories with custom builds for stable platforms.
 
 Consider if the bug has security consequences
 *********************************************

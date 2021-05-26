@@ -599,7 +599,7 @@ Asking for help
 
 If you did not have any luck with debugging the issue yourself you can reach us
 through `sssd-users <https://fedorahosted.org/mailman/listinfo/sssd-users>`_
-mailing list or `#sssd channel on freenode.net <irc://irc.freenode.net/sssd>`_ IRC.
+mailing list or `#sssd channel on libera.chat <irc://irc.libera.chat/sssd>`_ IRC.
 
 It would be great if you can also provide all the information that you have
 found so far to speed things up. Such as:
