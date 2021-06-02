@@ -62,6 +62,7 @@ Table of Contents
    docs/ad/ad-provider.rst
    docs/ad/ad-provider-manual.rst
    docs/ad/ad-ldap-provider.rst
+   docs/ad/ad-service-discovery.rst
 
 .. toctree::
    :caption: FreeIPA
