@@ -10,6 +10,28 @@ The advantage over the unit tests is obvious, the full daemon is ran and you can
 
 The disadvantages also stem from running the tests on the local machine. SSSD relies on whatever server it is connecting to to also run in the test environment provided by the cwrap libraries, but in many cases that is so difficult that we even haven't done the work (e.g. FreeIPA) or outright impossible (Active Directory). Even within the tests themselves, we sometimes stretch the limits of the cwrap libraries. As an example, the socket_wrapper library doesn't support faking the client credentials that the SSSD reads using the ``getsockopt`` call with the ``SO_PEERCRED`` parameter.
 
+Integration tests dependencies
+------------------------------
+Integration tests requires additional packages which are not installed in system by default. One way to solve this is to trigger ``make intgcheck`` in loop and add packages with missing binaries manually. To install dependencies run:
+
+.. code-tabs::
+
+    .. fedora-tab::
+
+        http-parser-devel
+        libcurl-devel
+        libdb-utils
+        openldap-clients
+        openldap-server
+        fakeroot
+        python3-pytest
+        python3-ldap
+        python3-ldb
+        python3-psutil
+        krb5-pkinit
+        krb5-server
+        krb5-workstation
+
 Running integration tests
 -------------------------
 
@@ -110,4 +132,3 @@ Examples
 The tests themselves are located under ``src/tests/intg``. Each file corresponds to one "test area", like testing the LDAP provider or testing the KCM responder.
 
 To see an example of adding test cases to existing tests, see commit `76ce965fc3abfdcf3a4a9518e57545ea060033d6 <https://github.com/SSSD/sssd/commit/76ce965fc3abfdcf3a4a9518e57545ea060033d6>`_ or for an example of adding a whole new test, including faking the client library (which should also illustrate the limits of the cwrap testing), see commit `5d838e13351d3062346ca449e00845750b9447da <https://github.com/SSSD/sssd/commit/5d838e13351d3062346ca449e00845750b9447da>`_ and the two preceding it.
-
