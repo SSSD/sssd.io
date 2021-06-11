@@ -10,6 +10,41 @@ The advantage over the unit tests is obvious, the full daemon is ran and you can
 
 The disadvantages also stem from running the tests on the local machine. SSSD relies on whatever server it is connecting to to also run in the test environment provided by the cwrap libraries, but in many cases that is so difficult that we even haven't done the work (e.g. FreeIPA) or outright impossible (Active Directory). Even within the tests themselves, we sometimes stretch the limits of the cwrap libraries. As an example, the socket_wrapper library doesn't support faking the client credentials that the SSSD reads using the ``getsockopt`` call with the ``SO_PEERCRED`` parameter.
 
+Integration tests dependencies
+------------------------------
+Integration tests requires additional packages which are not installed in system by default. One way to solve this is to trigger ``make intgcheck`` in loop and add reported missing packages manually. Alternative option is to install bellow packages which in most cases should satisfy integration test requirements:
+
+.. code-tabs::
+
+    .. fedora-tab::
+
+        sudo dnf builddep sssd
+        sudo dnf install -y \
+            clang-analyzer \
+            curl-devel \
+            fakeroot \
+            http-parser-devel \
+            krb5-server \
+            krb5-workstation \
+            lcov \
+            libcmocka-devel \
+            libfaketime \
+            mock \
+            nss_wrapper \
+            openldap-clients \
+            openldap-servers \
+            pam_wrapper \
+            python3-ldap \
+            python3-ldb \
+            python3-psutil \
+            python3-pycodestyle \
+            python3-pytest \
+            python3-requests \
+            redhat-lsb-core \
+            rpm-build \
+            uid_wrapper \
+            valgrind
+
 Running integration tests
 -------------------------
 
