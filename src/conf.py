@@ -97,6 +97,8 @@ html_theme_options = {
     }
 }
 
+html_favicon = '../extensions/sssd/io/themes/sssd.io/static/images/logo.svg'
+
 # Exclude certain pages if fast build is required
 if os.environ.get('FASTBUILD', None) == "yes":
     exclude_patterns = [
