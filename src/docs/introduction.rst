@@ -112,7 +112,7 @@ Offline access
 **************
 
 What happens when if the directory server is offline? Or you have a poor
-wireless signal on your laptop and keep on disconnecting? Do youu need to log in
+wireless signal on your laptop and keep on disconnecting? Do you need to log in
 with a local user? Absolutely not, SSSD has a cache to improve performance after
 finding a user. The user’s password is also stored (if enabled) and as long as
 the user has logged in before, they will be able to log in with SSSD even when
