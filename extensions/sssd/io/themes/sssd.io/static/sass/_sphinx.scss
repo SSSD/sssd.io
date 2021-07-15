@@ -368,4 +368,16 @@
             }
         }
     }
+
+    .lightbox-container {
+        & {
+            @extend .flex-hcenter;
+            flex-wrap: wrap;
+        }
+
+        a {
+            max-width: 12rem;
+            margin: 0.5rem;
+        }
+    }
 }
