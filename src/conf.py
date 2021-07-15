@@ -40,6 +40,7 @@ extensions = [
     'sphinx.ext.graphviz',
     'sssd.io.directives.codetabs',
     'sssd.io.directives.mermaid',
+    'sssd.io.directives.lightbox',
     'sssd.io.directives.poster',
     'sssd.io.directives.releases',
     'sssd.io.directives.toctree',
