@@ -94,6 +94,7 @@ Table of Contents
    troubleshooting/ad_provider
    troubleshooting/ldap_provider
    troubleshooting/ipa_provider
+   troubleshooting/shortnames
 
 .. Main menu at the top of the page.
    It is important to keep it as the last navigation.
