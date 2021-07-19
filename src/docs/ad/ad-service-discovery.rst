@@ -25,11 +25,9 @@ LDAP/CLDAP ping
 ===============
 `CLDAP (Connection-Less LDAP) ping  <https://ldapwiki.com/wiki/LDAP%20ping>`_ is a way for clients to check the liveliness of a domain controller. Instead of LDAP where the communication is done over TCP protocol, the CLDAP ping is sent over UDP to be faster. It is often necessary for SSSD to try to find available domain controllers within a domain, or within an AD site. SSSD sends a LDAP ping during the service discovery phase by sending a `rootDSE <https://ldapwiki.com/wiki/RootDSE>`_ search of the **netlogon** attribute. If available, the AD domain controller will return site, forest, and domain information in the **netlogon** response.
 
-.. note::
+.. seealso::
 
     CLDAP ping behavior performed by Microsoft clients is described in `Microsoft protocol documentation <https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/WinArchive/%5bMS-DISO%5d.pdf>`_
-
-.. note::
 
 SSSD stores the site information into the cache. If SSSD is restarted and a site name is in the cache, SSSD will attempt the CLDAP ping in the current site first.
 
@@ -43,6 +41,7 @@ At domain initialization, if ``ad_enable_dns_sites`` is true (default) then the 
 
 #. **Set discovery domain**: read from ``dns_discovery_domain`` option or use ``ad_domain`` name
 #. **Lookup AD site and forest** information using CLDAP ping
+
 
 .. image:: cldap-ping.svg
    :height: 500px
