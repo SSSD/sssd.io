@@ -60,7 +60,7 @@ Client libraries
 
 Clients
     Clients are not part of SSSD, they are the applications used by users. These
-    applications talks to SSSD using the interface implemented in the client
+    applications talk to SSSD using the interface implemented in the client
     libraries. We can state ``id``, ``getent``, ``su`` and ``sudo`` as an
     example of such applications or ``glibc`` and its nsswitch or PAM libraries
     that talks with SSSD on behalf of the application.
