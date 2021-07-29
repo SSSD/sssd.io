@@ -15,7 +15,7 @@ are described in more detail below the diagram.
 
 Backends
     The goal of the backend is to keep the cache up to date. To do so, it talks
-    to the remove server, requests required data and then stores the data in the
+    to the remote server, requests required data and then stores the data in the
     cache. There are multiple mechanisms that keeps the cache valid and
     consistent, some of them are triggered by a user request (e.g. user
     authentication) and some of them happens automatically on the background.
