@@ -68,7 +68,7 @@ Clients
 Monitor
     The monitor is the main SSSD process ``sssd``. It's purpose is to start and
     stop requested backends and responders and as the name suggest, it also
-    monitors their state and restarts them if they suddenly stops.
+    monitors their state and restarts them if they suddenly stop.
 
 Tools
     These are utility tools that can be used to monitor SSSD's status and
