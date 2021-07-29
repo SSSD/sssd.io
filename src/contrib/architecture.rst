@@ -63,7 +63,7 @@ Clients
     applications talk to SSSD using the interface implemented in the client
     libraries. We can state ``id``, ``getent``, ``su`` and ``sudo`` as
     examples of such applications or ``glibc`` and its nsswitch or PAM libraries
-    that talks with SSSD on behalf of the application.
+    that talk with SSSD on behalf of the application.
 
 Monitor
     The monitor is the main SSSD process ``sssd``. It's purpose is to start and
