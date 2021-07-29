@@ -22,7 +22,7 @@ Backends
 
     Each backend represents one SSSD domain that is configured in the
     ``[domain/$name]`` section of the SSSD configuration and it is started as
-    its own instance of ``sssd_be`` process. It consist from modules called the
+    its own instance of ``sssd_be`` process. It consist of modules called the
     *data providers* that implements specific functionality such as:
 
     * id provider: identity of users, groups, services, ...
