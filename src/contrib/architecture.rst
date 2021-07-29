@@ -15,14 +15,14 @@ are described in more detail below the diagram.
 
 Backends
     The goal of the backend is to keep the cache up to date. To do so, it talks
-    to the remove server, requests required data and then stores the data in the
+    to the remote server, requests required data and then stores the data in the
     cache. There are multiple mechanisms that keeps the cache valid and
     consistent, some of them are triggered by a user request (e.g. user
     authentication) and some of them happens automatically on the background.
 
     Each backend represents one SSSD domain that is configured in the
     ``[domain/$name]`` section of the SSSD configuration and it is started as
-    its own instance of ``sssd_be`` process. It consist from modules called the
+    its own instance of ``sssd_be`` process. It consist of modules called the
     *data providers* that implements specific functionality such as:
 
     * id provider: identity of users, groups, services, ...
@@ -38,7 +38,7 @@ Responders
     returns it. If the data is missing or expired, it asks the backend to query
     the server first and then the responder returns the result.
 
-    There are many responders that serves many different purpose, such as the
+    There are many responders that serve many different purposes, such as the
     NSS responder that provides data to the `Name Service Switch`_ (nsswitch, nss)
     service (do not confuse it with `Network Security Services`_) or the PAM
     responder that implements authentication via `Pluggable Authentication
@@ -60,15 +60,15 @@ Client libraries
 
 Clients
     Clients are not part of SSSD, they are the applications used by users. These
-    applications talks to SSSD using the interface implemented in the client
-    libraries. We can state ``id``, ``getent``, ``su`` and ``sudo`` as an
-    example of such applications or ``glibc`` and its nsswitch or PAM libraries
-    that talks with SSSD on behalf of the application.
+    applications talk to SSSD using the interface implemented in the client
+    libraries. We can state ``id``, ``getent``, ``su`` and ``sudo`` as
+    examples of such applications or ``glibc`` and its nsswitch or PAM libraries
+    that talk with SSSD on behalf of the application.
 
 Monitor
     The monitor is the main SSSD process ``sssd``. It's purpose is to start and
     stop requested backends and responders and as the name suggest, it also
-    monitors their state and restarts them if they suddenly stops.
+    monitors their state and restarts them if they suddenly stop.
 
 Tools
     These are utility tools that can be used to monitor SSSD's status and
