@@ -38,7 +38,7 @@ Responders
     returns it. If the data is missing or expired, it asks the backend to query
     the server first and then the responder returns the result.
 
-    There are many responders that serves many different purpose, such as the
+    There are many responders that serve many different purpose, such as the
     NSS responder that provides data to the `Name Service Switch`_ (nsswitch, nss)
     service (do not confuse it with `Network Security Services`_) or the PAM
     responder that implements authentication via `Pluggable Authentication
