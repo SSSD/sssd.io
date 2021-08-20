@@ -1,4 +1,4 @@
-# SSSD Documentation Sources (work in progress)
+# SSSD Documentation Sources
 
 The documentation is written in [reStructuredText] format and can be build
 with [Sphinx] documentation generator.
