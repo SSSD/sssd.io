@@ -146,7 +146,7 @@ Functions
 
 Strings
     * Use index  format specifiers if a string is internationalized
-      (e.g. ``_("item %1ůs has %2$s value")``
+      (e.g. ``_("item %1$s has %2$s value")``
 
 Including headers
     * Headers should be grouped properly (system, project, etc.)
