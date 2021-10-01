@@ -54,6 +54,10 @@ Arguments
 midpoint
     Handle background (out of band) object refreshes. It is used to enable the ``entry_cache_nowait_percentage`` configuration option in the NSS responder. Set this argument to 0 for non-NSS responder callers.
 
+.. note::
+
+    A **midpoint** refresh is a cache performance optimization implemented in cache req code, it is used to avoid a blocking call when refreshing an entry after the entry has expired. This allows SSSD to refresh cached entries in the background prior to a cached object/entry expiration, based on a configurable (``entry_cache_nowait_percentage``) percentage. The entry is returned from the cache immediately, but also a request to refresh the object in the backend is performed. The end result is that no delay is seen on the client side.
+
 req_dom_type
     Limit the request type lookups to only POSIX Domains (``CACHE_REQ_POSIX_DOM``), only ``CACHE_REQ_APPLICATION_DOM`` or any domain type (``CACHE_REQ_ANY_DOM``). POSIX domains are reachable by all services. Application domains are only reachable from the InfoPipe responder and the PAM responder. Only objects from POSIX domains are available to the operating system interfaces (NSS) and utilities.
 
