@@ -1,0 +1,15 @@
+name: Build
+on: [push, pull_request]
+jobs:
+  make:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install dependencies
+      run: |
+        sudo apt-get install graphviz
+        pip3 install virtualenv
+        virtualenv .venv
+        source .venv/bin/activate
+        pip3 install -r ./requirements.txt
+    - run: source .venv/bin/activate && make html SPHINXOPTS="-W --keep-going -n"
