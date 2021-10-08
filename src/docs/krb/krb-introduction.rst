@@ -1,33 +1,76 @@
-Introduction to Kerberos Integration
-####################################
+Introduction to Kerberos
+########################
 
-The Kerberos Protocol is a commonly used network authentication protocol to secure logins and communication between linux services. SSSD on Linux clients can be configured to authenticate against Kerberos servers (or *KDCs*), allowing kerberos communication to be handled by SSSD and providing Kerberos tickets to the user or service at login.
+`Kerberos`_ is a computer-network authentication protocol. It is based on
+symmetric-key cryptography and mutual authentication between client and server
+(called Key Distribution Center; KDC) **without sending user's secrets over the
+network**. It is commonly used to authenticate users, computers and services in
+centralized identity management.
 
-SSSD is often used as a client to communicate with Red Hat MIT Kerberos KDC, :doc:`FreeIPA <../ipa/ipa-introduction>` or the built-in Windows Active Directory KDC. Features of the SSSD *KRB5* provider include* 
+The authentication itself is done by exchanging encrypted messages that contains
+encrypted tickets and encryption keys required to decrypt the tickets and
+continue the protocol communication. To decrypt the message, one must posses
+information (usually a password) that can be used to create the correct
+encryption key.
 
-* Automatic renewal of tickets
-* Ticket lifetime configurable options
-* FAST support
-* Map User
-* Backup KDC server support
+A ticket-granting ticket (TGT) is obtained after a successful authentication and
+stored in user's credential cache. This ticket can be used to authenticate the
+user against other services without entering user's secrets again. Therefore the
+user has to provide the authentication token only once to obtain the
+ticket-granting ticket as long as the ticket is valid and not expired. This is
+referred to as **single sign-on** (SSO).
+
+.. _Kerberos: https://en.wikipedia.org/wiki/Kerberos_(protocol)
+
+.. seealso::
+
+    Kerberos is a standardized protocol described in `RFC4120
+    <https://datatracker.ietf.org/doc/html/rfc4120>`__. Additional, there are
+    many standardized extensions that extends the Kerberos protocol with a new
+    functionality. For example:
+
+    * `A Generalized Framework for Kerberos Pre-Authentication <https://datatracker.ietf.org/doc/html/rfc6113.html>`__
+    * `One-Time Password Pre-Authentication (OTP) <https://datatracker.ietf.org/doc/html/rfc6560>`__
+    * `Public-key cryptography for Initial Authentication in Kerberos (PKINIT) <https://datatracker.ietf.org/doc/html/rfc4556>`__
+
+:doc:`FreeIPA <../ipa/ipa-introduction>` and :doc:`Active Directory
+<../ad/ad-introduction>` requires Kerberos protocol for authentication. It can
+be optionally used with plain :doc:`LDAP <../ldap/ldap-introduction>`. SSSD has
+vast Kerberos support, including:
+
+* Automatic ticket renewal
+* Offline authentication
+* Smartcard authentication
+* Two-factor authentication
+* FAST channel support
+* ``.k5login`` based access control
+* ... and more
 
 .. note::
 
-    Client side support for features is dependent on Kerberos server side support.
+    There are two main open-source Kerberos implementations.
 
-To read more about how SSSD is used in Kerberos integration at a high level, refer to the following links:
+    * `MIT Kerberos <https://web.mit.edu/kerberos>`__
+    * `Heimdal <https://github.com/heimdal/heimdal>`__
 
-* `Understanding SSSD and its benefits <https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/configuring_authentication_and_authorization_in_rhel/understanding-sssd-and-its-benefits_configuring-authentication-and-authorization-in-rhel>`_
 
+The Kerberos is fully integrated into identity management solutions
+:doc:`FreeIPA <../ipa/ipa-introduction>` and :doc:`Active Directory
+<../ad/ad-introduction>` and it is required for authentication. It can be
+optionally used with plain :doc:`LDAP <../ldap/ldap-introduction>`. SSSD has
+vast Kerberos support, including:
 
-* `Using Kerberos <https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/system-level_authentication_guide/using_kerberos>`_
+* Automatic ticket renewal
+* Smartcard authentication
+* Two-factor authentication
+* FAST channel support
+* ``.k5login`` based access control
+* Offline authentication and automatic ticket acquirement upon transition to
+  online state
+* ... and more
 
-Or on the terminal to read about SSSD's Kerberos provider
+.. seealso::
 
-.. code-block:: console
-
-    $ man sssd-krb5
-
-Setting up a Red Hat Kerberos Server has its own documentation:
-
-* `Configuring the Kerberos KDC <https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/system-level_authentication_guide/configuring_a_kerberos_5_server>`_
+  * `Understanding SSSD and its benefits <https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/configuring_authentication_and_authorization_in_rhel/understanding-sssd-and-its-benefits_configuring-authentication-and-authorization-in-rhel>`__
+  * `Using Kerberos <https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/system-level_authentication_guide/using_kerberos>`__
+  * `Configuring the Kerberos KDC <https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/system-level_authentication_guide/configuring_a_kerberos_5_server>`__
