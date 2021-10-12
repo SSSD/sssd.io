@@ -19,6 +19,7 @@ Table of Contents
    Architecture <contrib/architecture>
    Memory allocator <contrib/talloc>
    Asynchronous programming <contrib/tevent>
+   Internal D-Bus communication <contrib/dbus>
 
 .. toctree::
    :caption: Under the hood
