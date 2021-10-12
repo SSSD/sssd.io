@@ -8,10 +8,6 @@ SPHINXBUILD   ?= sphinx-build
 SOURCEDIR     = src
 BUILDDIR      = _build
 
-# Put it first so that "make" without argument is like "make help".
-help:
-	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS)
-
 html: Makefile
 	@$(SPHINXBUILD) -M html "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) -v
 
