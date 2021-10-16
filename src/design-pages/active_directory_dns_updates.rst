@@ -210,7 +210,7 @@ not include the provider-specific prefix but rather be provider agnostic
 to ease sharing the code and possibly allow other providers to use
 dynamic DNS updates as well. The new options are:
 
-#. ``dynds_update`` ``(bool)`` - whether to perform the dynamic DNS
+#. ``dyndns_update`` ``(bool)`` - whether to perform the dynamic DNS
    update. Defaults to false.
 #. ``dyndns_refresh_interval`` ``(integer)`` - how often to run the
    periodic task to refresh the resource record
