@@ -90,6 +90,7 @@ Table of Contents
 
    Basics <troubleshooting/basics>
    Backend <troubleshooting/backend>
+   Log Analyzer <troubleshooting/analyzer>
    Fleet Commander <troubleshooting/fleet-commander>
    SUDO <troubleshooting/sudo>
    troubleshooting/ad_provider
