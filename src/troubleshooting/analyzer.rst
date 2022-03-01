@@ -6,9 +6,13 @@ analysis. This analyzer tool can be called using the ``sssctl analyze`` command,
 
 Use Case
 ********
-Identifying SSSD failures can be a difficult task without knowledge of SSSD internal components. If an administrator or SSSD user doesn't know what to look for, it may become a very slow and time consuming process. The ``sssctl analyze`` tool improves the overall troubleshooting workflow for administrators, users, and anyone needing to review SSSD debug logs. The initial use case is to extract and print SSSD logs pertaining only to certain client requests across responder and backend sssd processes.
+Identifying SSSD failures can be a difficult task without knowledge of SSSD internal components. If an administrator or SSSD user doesn't know what to look for, it may become a very slow and time consuming process. The ``sssctl analyze`` tool improves the overall troubleshooting workflow for administrators, users, and anyone needing to review SSSD debug logs. The initial use case is to extract and print SSSD logs pertaining only to certain client requests across responder, backend, and child sssd processes.
 
-A `Pull request <https://github.com/SSSD/sssd/pull/5863>`_ is in review upstream to enable functionality for the analyzer tool to print logs across all responders, and SSSD child processes.
+Prerequisites
+*************
+* ``debug_level`` should be set to at least **7** in the **[$responder]** section, and **[domain/$domain]** section to enable analyze log parsing functionality.
+
+* Logs to analyze must be from compatible SSSD version built with tevent chain ID support.
 
 Command line
 ************
@@ -70,6 +74,10 @@ Print client command request list, NSS (default), or PAM
     # sssctl analyze request list
     # sssctl analyze request list --pam
 
+.. note::
+
+    SSSD tracks identity user/group information (id, getent) in the NSS separately from PAM responder user authentication(su, ssh). The CID in the NSS responder is independent of the CID in the PAM responder, you will see overlapping numbers when analyzing NSS and PAM requests. Use `--pam` option when necessary.
+
 Verbose list output
 
 .. code-block:: bash
@@ -101,9 +109,6 @@ Supports ``--logger=journald`` configurations
     # sssctl analyze --source=journald request list
 
 Analyze logs extracted, or sent from another user.
-
-.. note::
-    Logs must be from compatible SSSD version built with tevent chain ID support.
 
 .. code-block:: bash
 
