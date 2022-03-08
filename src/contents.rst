@@ -64,6 +64,7 @@ Table of Contents
    docs/ad/ad-provider-manual.rst
    docs/ad/ad-ldap-provider.rst
    docs/ad/ad-service-discovery.rst
+   Using AutoFS <docs/ad/ad-autofs.rst>
 
 .. toctree::
    :caption: FreeIPA
