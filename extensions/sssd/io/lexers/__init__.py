@@ -4,6 +4,7 @@ from .NSSwitchLexer import NSSwitchLexer
 from .PAMLexer import PAMLexer
 from .SSSDLogLexer import SSSDLogLexer
 from .ReleaseNotesShortlogLexer import ReleaseNotesShortlogLexer
+from .LDIFLexer import LDIFLexer
 
 
 def setup(app):
@@ -11,3 +12,4 @@ def setup(app):
     lexers['pam'] = PAMLexer()
     lexers['sssd-log'] = SSSDLogLexer()
     lexers['release-notes-shortlog'] = ReleaseNotesShortlogLexer()
+    lexers['ldif'] = LDIFLexer()
