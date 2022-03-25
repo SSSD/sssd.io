@@ -49,6 +49,14 @@ the non-controller system(s).
 
      remove-ds.pl -i slapd-example-1
 
+If you use a more recent version of 389ds you might have to call
+
+.. code-block:: bash
+
+     dsctl slapd-localhost remove --do-it
+
+instead.
+
 And possibly
 
 .. code-block:: bash
