@@ -122,7 +122,7 @@ like a good compromise.
 How the data is organized
 -------------------------
 
-Currently there are three different kind of data elements
+Currently there are four different kind of data elements
 
 passwd
     User data defined by ``struct passwd``, see ``man getpwnam`` for details
@@ -133,7 +133,10 @@ group
 initgroups
     Group memberships of user
 
-All three types are stored in individual cache files. This allows a flexible
+SID
+    SID <-> user/group ID mapping
+
+All four types are stored in individual cache files. This allows a flexible
 playload size and avoids hash collisions of different data types accessed with
 the same name. Besides the type specific data all data elements start with a
 common header.
@@ -332,7 +335,7 @@ group name and the group password ('*') the names of the 8 group members
 The Initgr Data
 ^^^^^^^^^^^^^^^
 
-Finally the initgr data is defined in ``src/util/mmap_cache.h`` as:
+The initgr data is defined in ``src/util/mmap_cache.h`` as:
 
 .. code-block:: c
 
@@ -438,6 +441,38 @@ bytes. This means 16 bytes more than the strings alone with is agreement to the
 number of GIDs ``num_groups`` ``0x4`` (4). The GIDs of the groups are
 ``0x2bb9d92a`` (733600042), ``0x2bb9d933`` (733600051), ``0x2bb9d934``
 (733600052) and ``0x2bb9d935`` (733600053).
+
+The SID Data
+^^^^^^^^^^^^
+
+The SID data is defined in ``src/util/mmap_cache.h`` as:
+
+.. code-block:: c
+
+    struct sss_mc_sid_data {
+        rel_ptr_t name;         /* ptr to SID string, rel. to struct base addr */
+        uint32_t type;          /* enum sss_id_type */
+        uint32_t id;            /* gid or uid */
+        uint32_t populated_by;  /* 0 - by_id(), 1 - by_uid/gid() lookup */
+        uint32_t sid_len;       /* length of sid */
+        char sid[0];
+    };
+
+The ``name`` pointer is a shortcut to the ``sid`` data and is used to make sure
+that the object, found with the hash value, matches the input SID. If the user
+is searched by ID the ``id`` value is used for this check. If there is no match
+there is either a hash collision and the next entry in the chain has to be checked
+or the search entry is currently not in the memory cache and the request is
+forwarded to SSSD's nss responder.
+
+``type`` indicates object type: user or group. Take a note, string representation
+of ``type-id`` is used as an input for ``hash2``.
+
+``populated_by`` indicates lookup type that was used to populate this entry:
+``0`` if entry was populated via generic ...by_id() lookup, ``1`` if entry was
+populated via explicit ...by_uid() or ...by_gid() lookup. This information is
+important since in general presence of group object in memory cache doesn't
+necessarily mean absence of user object with the same ID on the server.
 
 How does a Client lookup an Entry?
 ----------------------------------
