@@ -55,7 +55,7 @@ Request Tracking
 |                | sssd                      |                                                                                                        |
 +----------------+---------------------------+--------------------------------------------------------------------------------------------------------+
 | show           | Print logs pertaining to  | --merge                   Merge logs together sorted by timestamp (requires debug_microseconds = True) |
-|                | a provided client ID      | --cachereq                Include cache request logs                                                   |
+|                | a provided client ID      | --child                   Include child process logs                                                   |
 |                | number                    | --pam                     Track only PAM requests                                                      |
 |                |                           |                                                                                                        |
 +----------------+---------------------------+--------------------------------------------------------------------------------------------------------+
@@ -90,11 +90,11 @@ Track individual NSS request id number 20
 
     # sssctl analyze request show 20
 
-Track individual NSS request including cache request logs
+Track PAM request including child process logs
 
 .. code-block:: bash
 
-    # sssctl analyze request show 20 --cachereq
+    # sssctl analyze request show 13 --child --pam
 
 Track individual PAM request
 
