@@ -23,7 +23,7 @@ Detailed Changelog
 
 .. code-block:: release-notes-shortlog
 
-    $ git shortlog --pretty=format:"%h  %s" -w0,4 2.7.1..2.7.2
+    $ git shortlog --pretty=format:"%h  %s" -w0,4 2.7.2..2.7.3
 
     Alexey Tikhonov (8):
         abc2ae569  PAM P11: fixed mistype in a log message
