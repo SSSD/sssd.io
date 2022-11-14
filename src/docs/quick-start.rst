@@ -8,10 +8,10 @@ Quick Start IPA
 
 Before starting, make sure you have the following information.
 
-- Administrator credentials *i.e. admin*
-- FreeIPA domain name *i.e. sssd.io*
-- FreeIPA server hostname *i.e. ipa1.sssd.io*
-- FreeIPA server IP *i.e. 1.2.3.4*
+- Administrator credentials *e.g. admin*
+- FreeIPA domain name *e.g. sssd.io*
+- FreeIPA server hostname *e.g. ipa1.sssd.io*
+- FreeIPA server IP *e.g.. 1.2.3.4*
 
 Install the necessary packages, for RHEL and clones the package is named ``ipa-client``, and for Fedora it’s ``freeipa-client``.
 
