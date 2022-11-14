@@ -58,10 +58,10 @@ Quick Start AD
 
 Before starting make sure you have the following information:
 
-- Domain user credentials *i.e. Administrator*
-- AD Domain name *i.e. sssd.io*
-- AD Server IP *i.e. 1.2.3.4*
-- AD Server hostname *i.e. ad1.sssd.io*
+- Domain user credentials *e.g. Administrator*
+- AD Domain name *e.g. sssd.io*
+- AD Server IP *e.g. 1.2.3.4*
+- AD Server hostname *e.g. ad1.sssd.io*
 
 Install the necessary packages, for RHEL and clones the packages are ``sssd, adcli, realm, oddjob`` and ``oddjob-mkhomedir``
 
@@ -118,13 +118,13 @@ Quick Start LDAP
 
 Before starting make sure you have the following information:
 
-- LDAP domain *i.e. sssd.io*
-- LDAP suffix *i.e. DC=sssd,DC=io*
-- LDAP bind user *i.e. UID=bind_user,OU=people,DC=sssd,DC=io*
-- LDAP bind password *i.e. password123*
-- LDAP server hostname *i.e. ldap1.sssd.io*
-- LDAP server IP *i.e. 1.2.3.4*
-- LDAP server CA certificate *i.e. /etc/openldap/cacerts/ca.crt*
+- LDAP domain *e.g. sssd.io*
+- LDAP suffix *e.g. DC=sssd,DC=io*
+- LDAP bind user *e.g. UID=bind_user,OU=people,DC=sssd,DC=io*
+- LDAP bind password *e.g. password123*
+- LDAP server hostname *e.g. ldap1.sssd.io*
+- LDAP server IP *e.g. 1.2.3.4*
+- LDAP server CA certificate *e.g. /etc/openldap/cacerts/ca.crt*
 
 .. note::
 
