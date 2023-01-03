@@ -1,0 +1,70 @@
+@startuml
+actor User
+
+box "Client"
+participant "passkey"
+end box
+
+participant "PAM"
+
+box "SSSD"
+participant "PAM responder"
+participant "cache"
+participant "IPA provider"
+participant "krb5_child"
+participant "passkey_child"
+end box
+
+participant "libkrb5"
+
+box "FreeIPA server"
+participant "Kerberos KDC"
+participant "ipa-otpd"
+participant "LDAP"
+participant "passkey_child_ipa"
+end box
+
+User -> PAM: Login
+PAM -> "PAM responder": pre_authenticate
+"PAM responder" -> cache: Retrieve user information
+cache -> "PAM responder": User information
+"PAM responder" -> "IPA provider": pre_authenticate ()
+"IPA provider" -> krb5_child: pre_authenticate ()
+krb5_child -> "libkrb5": pre_authenticate ()
+"libkrb5" -> "Kerberos KDC": AS-REQ (preauth)
+"Kerberos KDC" -> "ipa-otpd": Access-Request (username)
+"ipa-otpd" -> LDAP: Retrieve user information
+LDAP -> "ipa-otpd": User information
+"ipa-otpd" -> "Kerberos KDC": Access-Challenge(State, Reply-Message=assertion req data)
+"Kerberos KDC" -> "libkrb5": krb5 error (preauth required PASSKEY, assertion req data)
+"libkrb5" -> krb5_child: krb5 error (preauth required PASSKEY, assertion req data)
+
+krb5_child -> "IPA provider": error (preauth required PASSKEY, assertion req data)
+"IPA provider" -> "PAM responder": error (preauth required PASSKEY, assertion req data)
+"PAM responder" -> PAM: Get PIN
+PAM -> User: Ask for PIN
+User -> PAM: Input PIN
+PAM -> "PAM responder": Set PIN
+"PAM responder" -> passkey_child: Run (assertion req data, PIN)
+passkey_child -> "passkey": Request assertion (assertion req data, PIN)
+"passkey" -> passkey_child: Return assertion
+passkey_child -> "PAM responder": Assertion data
+
+"PAM responder" -> "IPA provider": pre_authenticate (assertion)
+"IPA provider" -> krb5_child: pre_authenticate (assertion)
+krb5_child -> "libkrb5": pre_authenticate (assertion)
+"libkrb5" -> "Kerberos KDC": AS-REQ (assertion in preauth)
+"Kerberos KDC" -> "ipa-otpd": Access-Request (assertion data)
+"ipa-otpd" -> passkey_child_ipa: Validate assertion
+passkey_child_ipa -> "ipa-otpd": Authentication success
+"ipa-otpd" -> "Kerberos KDC": Access-Accept
+"Kerberos KDC" -> "libkrb5": AS-REP with ticket
+
+"libkrb5" -> krb5_child: Kerberos ticket
+krb5_child -> krb5_child: Store Kerberos ticket into ccache
+krb5_child -> "IPA provider": Authentication success
+"IPA provider" -> "PAM responder": Authentication success
+"PAM responder" -> PAM: Authentication success
+PAM -> User: Authentication success
+
+@enduml
