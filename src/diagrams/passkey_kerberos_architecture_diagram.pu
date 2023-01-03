@@ -1,0 +1,51 @@
+@startuml
+
+rectangle Client #line.dashed {
+    rectangle User
+
+    rectangle Host #DodgerBlue {
+        rectangle PAM #red
+        rectangle SSSD #red
+    }
+    
+    rectangle passkey as key #ForestGreen
+    rectangle "libkrb5" as kerberos #IndianRed
+}
+
+rectangle Datacenter #line.dashed {
+    rectangle "FreeIPA server" as ipa #Aqua {
+        rectangle "Kerberos KDC" as kdc #Yellow
+        rectangle "ipa-otpd" as otpd #Yellow
+        rectangle LDAP #Yellow
+        rectangle passkey_child #Yellow
+    }
+}
+
+User -> PAM: 1- Login
+PAM -> SSSD: 2- Authenticate
+SSSD ---down-> kerberos: 3- pre_authenticate
+kerberos -down-> kdc: 4- AS-REQ
+kdc -up-> kerberos: 5- krb5 error
+kerberos ---up-> SSSD: 6- krb5 error
+SSSD -left-> PAM: 7- PIN needed
+PAM -left-> User: 8- Ask for PIN
+User -> PAM: 9- Input PIN
+PAM -> SSSD: 10- Set PIN
+SSSD --down-> key: 11- Request assertion with PIN
+key --up-> SSSD: 12- Return assertion
+SSSD ---down-> kerberos: 13- pre_authenticate
+kerberos -down-> kdc: 14- AS-REQ
+kdc -> otpd: 15- Access-Request
+otpd -down-> LDAP: 16- Retrieve user information
+LDAP -up-> otpd: 17- User information
+otpd -> passkey_child: 18- Validate assertion
+passkey_child -left-> otpd: 19- Authentication success
+otpd -left-> kdc: 20- Authentication success
+kdc -up-> kerberos: 21- AS-REP
+kerberos ---up-> SSSD: 22- Authentication success and kerberos ticket
+SSSD -left-> PAM: 23- Authentication success
+PAM -left-> User: 24- Authentication success
+
+'Ref: https://crashedmind.github.io/PlantUMLHitchhikersGuide/layout/layout.html
+
+@enduml
