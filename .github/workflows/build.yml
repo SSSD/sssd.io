@@ -7,7 +7,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Install dependencies
       run: |
-        sudo apt-get install graphviz
+        sudo apt-get install graphviz plantuml
         pip3 install virtualenv
         virtualenv .venv
         source .venv/bin/activate
