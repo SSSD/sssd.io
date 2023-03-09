@@ -2,8 +2,13 @@ version: 2
 sphinx:
   configuration: src/conf.py
 python:
-  version: 3.7
   install:
     - requirements: requirements.txt
 formats: []
-
+build:
+  os: ubuntu-22.04
+  apt_packages:
+  - graphviz
+  - plantuml
+  tools:
+    python: '3.11'

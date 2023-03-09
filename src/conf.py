@@ -38,6 +38,7 @@ master_doc = 'contents'
 extensions = [
     'sphinx_gitstamp',
     'sphinx.ext.graphviz',
+    'sphinxcontrib.plantuml',
     'sssd.io.directives.codetabs',
     'sssd.io.directives.mermaid',
     'sssd.io.directives.lightbox',
@@ -49,6 +50,7 @@ extensions = [
 ]
 
 graphviz_output_format = 'svg'
+plantuml_output_format = 'svg_img'
 
 # Add any paths that contain templates here, relative to this directory.
 # templates_path = ['_templates']
