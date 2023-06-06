@@ -68,8 +68,9 @@ The output of this command can be set to the LDAP server in a dedicated
 attribute. For AD we use the
 `altSecurityIdentities <https://learn.microsoft.com/en-us/windows/win32/adschema/a-altsecurityidentities>`__
 with a prefix (i.e. passkey). For FreeIPA we use a new attribute called
-ipapasskey from the ipapasskeyuser objectclass. For any other LDAP server we
-use the passkey attribute.
+ipapasskey from the
+`ipapasskeyuser objectclass <https://freeipa.readthedocs.io/en/latest/designs/passkeys.html#ldap-schema>`__
+. For any other LDAP server we use the passkey attribute.
 
 The format for server-side credentials for the key mapping is
 ``passkey:credentialId,pemPublicKey``.
@@ -81,10 +82,11 @@ The format for
 IPA process
 +++++++++++
 FreeIPA provides a direct way to register the passkey attributes to the user
-entry. As specified in FreeIPA's documentation this can be done with the
-`ipa user-add-passkey` command or directly in the WebUI. This way FreeIPA can
-take advantage of the SSSD and libfido2 integration to communicate with the
-device in a single step.
+entry. As specified in
+`FreeIPA's documentation <https://freeipa.readthedocs.io/en/latest/designs/passkeys.html#storage-of-the-passkey-mapping>`__
+this can be done with the `ipa user-add-passkey` command or directly in the
+WebUI. This way FreeIPA can take advantage of the SSSD and libfido2 integration
+to communicate with the device in a single step.
 
 AD (and any other LDAP server) process
 ++++++++++++++++++++++++++++++++++++++
