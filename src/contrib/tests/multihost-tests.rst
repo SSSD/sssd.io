@@ -11,7 +11,7 @@ The disadvantage of the tests is that setting up the environment can be complex 
 Running multihost tests
 -----------------------
 
-First, the infrastructure does not yet concern itself with provisioning at all. You need to set up a VM to run the tests on yourself, we recommend using the `SSSD Test Suite <https://github.com/SSSD/sssd-test-suite>`_ to handle the provisioning. The **tests will modify the machine** so use something disposable.
+First, the infrastructure does not yet concern itself with provisioning at all. You need to set up an environment to run the tests on yourself, we recommend using the `SSSD CI Containers <https://github.com/sssd/sssd-ci-containers>`_ to handle the provisioning. The **tests will modify the machine** so use something disposable.
 
 Clone and cd into the SSSD github repository:
 

@@ -16,9 +16,9 @@ Each test is different. Sometimes, you want to test the whole system end-to-end,
     tests/integration-tests
     tests/multihost-tests
 
-Virtual Test Suite for SSSD
----------------------------
+SSSD CI Containers
+------------------
 
-Developing and testing SSSD features may require Active Directory/FreeIPA/LDAP systems that can be easily provisioned and destroyed. The `SSSD Test Suite <https://github.com/SSSD/sssd-test-suite/>`_ is a set of Vagrant and Ansible scripts that will automatically setup and provision several virtual machines that you can use to test SSSD.
+Developing and testing SSSD features may require Active Directory/FreeIPA/LDAP systems that can be easily provisioned and destroyed. The `SSSD CI Containers <https://github.com/sssd/sssd-ci-containers/>`_ containers and images are intended to be used in SSSD CI and they should not be used in production. However, you can use them during SSSD local testing and development.
 
-It creates an out of the box working virtual environment with 389 Directory Server, IPA and Active Directory servers. It also creates an SSSD client machine enrolled to those servers, ready to build and debug your code.
+It creates an out of the box working container environment with 389 Directory Server, IPA and Samba Active Directory servers. It also creates an SSSD client container enrolled to those servers, ready to build and debug your code.
