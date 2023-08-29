@@ -242,52 +242,138 @@ a memory leak since it can help you identify the talloc context that was not
 freed properly. Use the following snippet to produce the talloc report from a
 running process:
 
-.. code-block:: bash
+.. code-tabs::
 
-    PROCESS=$(pidof sssd_nss)
-    FILE=/tmp/talloc.$PROCESS
-    sudo gdb -quiet -batch -p $PROCESS \
-        -ex "set \$file = (FILE*)fopen(\"$FILE\", \"w+\")" \
-        -ex 'call talloc_enable_null_tracking()' \
-        -ex 'call talloc_report_full(0, $file)' \
-        -ex 'detach' \
-        -ex 'quit' &> /dev/null
+    .. plain-tab::
+        :label: sssd-2.9.3+
+
+        .. code-block::
+
+            PROCESS=$(pidof sssd_nss)
+            FILE=/tmp/talloc.$PROCESS
+            sudo gdb -quiet -batch -p $PROCESS \
+                -ex "set \$file = (FILE*)fopen(\"$FILE\", \"w+\")" \
+                -ex 'call (void) talloc_report_full(0, $file)' \
+                -ex 'detach' \
+                -ex 'quit' &> /dev/null
+
+        Since sssd-2.9.3 ``talloc_enable_null_tracking()`` is called when
+        starting long running processes. As a result all allocations are
+        reported by ``talloc_report_full()`` when used on
+        NULL(``0``).
+
+    .. plain-tab::
+        :label: sssd-2.6 - sssd-2.9.2
+
+        .. code-block::
+
+            PROCESS=$(pidof sssd_nss)
+            FILE=/tmp/talloc.$PROCESS
+            sudo gdb -quiet -batch -p $PROCESS \
+                -ex "set \$file = (FILE*)fopen(\"$FILE\", \"w+\")" \
+                -ex 'call (void) talloc_report_full(autofree_ctx, $file)' \
+                -ex 'detach' \
+                -ex 'quit' &> /dev/null
+
+        Since ssssd-2.6 the dedicated local context ``autofree_ctx`` is used
+        instead of the deprecated ``talloc_autofree_context()``.
+
+    .. plain-tab::
+        :label: sssd-2.5 and older
+
+        .. code-block::
+
+            PROCESS=$(pidof sssd_nss)
+            FILE=/tmp/talloc.$PROCESS
+            sudo gdb -quiet -batch -p $PROCESS \
+                -ex "set \$file = (FILE*)fopen(\"$FILE\", \"w+\")" \
+                -ex 'call (void) talloc_enable_null_tracking()' \
+                -ex 'call (void) talloc_report_full(0, $file)' \
+                -ex 'detach' \
+                -ex 'quit' &> /dev/null
+
+        SSSD versions older than SSSD-2.6.0 use the deprecated
+        ``talloc_autofree_context()`` main context instead of the dedicated
+        local context ``autofree_ctx``.
+
+To allow ``gdb`` to handle the ``FILE`` type correctly and the ``autofree_ctx``
+symbol debug information should be installed at least for ``glibc`` and SSSD.
+You can call
+
+.. code-tabs::
+
+    .. fedora-tab::
+
+        dnf debuginfo-install glibc sssd-common
+
+    .. ubuntu-tab::
+
+        apt install sssd-common-dbgsym libc6-dbg
+
+to install the needed packages.
 
 The report shows the current memory hierarchy that is in the process. When
 investigating a memory leak, you want to check for all blocks that are attached
-to the top level ``null_context`` and for all contexts that appear more times
-than what is expected. The following snippet shows an example output so you can
-get the idea how the report looks like.
+to the top level ``autofree_context`` (or ``null_context``) and for all contexts
+that appear more times than what is expected. The following snippet shows an
+example output so you can get the idea how the report looks like.
 
 .. code-block:: text
 
-    full talloc report on 'null_context' (total  27436 bytes in 362 blocks)
-        autofree_context               contains  27436 bytes in 361 blocks (ref 0) 0x14f6380
-            struct tevent_context          contains  27436 bytes in 360 blocks (ref 0) 0x14f65a0
-                struct tevent_fd               contains    112 bytes in   1 blocks (ref 0) 0x15079c0
-                struct tevent_timer            contains    104 bytes in   1 blocks (ref 0) 0x15076b0
-                struct tevent_fd               contains    112 bytes in   1 blocks (ref 0) 0x1508e20
-                struct tevent_signal           contains    112 bytes in   3 blocks (ref 0) 0x14f7830
-                    reference to: struct tevent_sig_state
-                    struct tevent_common_signal_list contains     24 bytes in   1 blocks (ref 0) 0x14f78f0
-                struct tevent_signal           contains    112 bytes in   3 blocks (ref 0) 0x14f7560
-                    reference to: struct tevent_sig_state
-                    struct tevent_common_signal_list contains     24 bytes in   1 blocks (ref 0) 0x14f7620
-                struct tevent_fd               contains    112 bytes in   1 blocks (ref 0) 0x14f6940
-                struct main_context            contains  26404 bytes in 346 blocks (ref 0) 0x14f68c0
-                    struct resp_ctx                contains  19908 bytes in 234 blocks (ref 0) 0x1507ff0
-                        struct cli_ctx                 contains    512 bytes in   6 blocks (ref 0) 0x1526170
-                            struct tevent_timer            contains    104 bytes in   1 blocks (ref 0) 0x151bc90
-                            struct tevent_fd               contains    112 bytes in   1 blocks (ref 0) 0x1529f60
-                            struct nss_state_ctx           contains     56 bytes in   1 blocks (ref 0) 0x1509310
-                            struct cli_protocol            contains     16 bytes in   1 blocks (ref 0) 0x1526af0
-                            struct cli_creds               contains     24 bytes in   1 blocks (ref 0) 0x1529ee0
+    full talloc report on 'autofree_context' (total  27436 bytes in 362 blocks)
+        struct tevent_context          contains  27436 bytes in 360 blocks (ref 0) 0x14f65a0
+            struct tevent_fd               contains    112 bytes in   1 blocks (ref 0) 0x15079c0
+            struct tevent_timer            contains    104 bytes in   1 blocks (ref 0) 0x15076b0
+            struct tevent_fd               contains    112 bytes in   1 blocks (ref 0) 0x1508e20
+            struct tevent_signal           contains    112 bytes in   3 blocks (ref 0) 0x14f7830
+                reference to: struct tevent_sig_state
+                struct tevent_common_signal_list contains     24 bytes in   1 blocks (ref 0) 0x14f78f0
+            struct tevent_signal           contains    112 bytes in   3 blocks (ref 0) 0x14f7560
+                reference to: struct tevent_sig_state
+                struct tevent_common_signal_list contains     24 bytes in   1 blocks (ref 0) 0x14f7620
+            struct tevent_fd               contains    112 bytes in   1 blocks (ref 0) 0x14f6940
+            struct main_context            contains  26404 bytes in 346 blocks (ref 0) 0x14f68c0
+                struct resp_ctx                contains  19908 bytes in 234 blocks (ref 0) 0x1507ff0
+                    struct cli_ctx                 contains    512 bytes in   6 blocks (ref 0) 0x1526170
+                        struct tevent_timer            contains    104 bytes in   1 blocks (ref 0) 0x151bc90
+                        struct tevent_fd               contains    112 bytes in   1 blocks (ref 0) 0x1529f60
+                        struct nss_state_ctx           contains     56 bytes in   1 blocks (ref 0) 0x1509310
+                        struct cli_protocol            contains     16 bytes in   1 blocks (ref 0) 0x1526af0
+                        struct cli_creds               contains     24 bytes in   1 blocks (ref 0) 0x1529ee0
 
 See that it keeps the memory hierarchy with indentation so you can tell what is
 the parent context and how much memory does it take. The first line, the
-``null_context``, is the top level memory context that is used when ``NULL`` is
-given as a parent, e.g. ``talloc_new(NULL)``.
+``autofree_context`` (or ``null_context``), is the top level memory context.
 
+Please note that for SSSD versions older than 2.9.3, memory allocated with
+``NULL`` given as parent (e.g. ``talloc_new(NULL)``), will not be shown in the
+hierarchy by default. For the SSSD versions newer than SSSD-2.6.0 the hierarchy
+below SSSD's internal ``autofree_context`` is printed while for older versions
+the hierarchy below the deprecated libtalloc internal ``autofree_context``.
+
+To be able to collect information about memory allocated on the parent ``NULL``
+``talloc_enable_null_tracking()`` must be called. But only allocations done
+after the call will be recorded. Since the script for older version of SSSD is
+already calling ``talloc_enable_null_tracking()`` (here to enable the output of
+libtalloc's internal ``autofree_context``), calling it a second time would
+show allocations with the ``NULL`` parent as well if there were any between
+the two runs of the script. In general, if the ``NULL`` parent should be
+reported as well, it would be better to call e.g.
+
+.. code-block:: bash
+
+    sudo gdb -quiet -batch -p $(pidof sssd_nss) \
+        -ex 'call (void) talloc_enable_null_tracking()' \
+        -ex 'detach' \
+        -ex 'quit' &> /dev/null
+
+shortly after the start of SSSD, then wait a bit or run some operations which
+should trigger allocations on the ``NULL`` parent you are interested in and
+then call the report script.
+
+Since sssd-2.9.3 ``talloc_enable_null_tracking()`` is called during the
+initialization of long running processes and the allocations on the ``NULL``
+context are always reported as well.
 
 Temporary memory context
 ************************
