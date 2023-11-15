@@ -23,7 +23,7 @@ When using the AD provider, by default SSSD clients utilize auto-discovery of Ac
 
 LDAP/CLDAP ping
 ===============
-`CLDAP (Connection-Less LDAP) ping  <https://ldapwiki.com/wiki/LDAP%20ping>`_ is a way for clients to check the liveliness of a domain controller. Instead of LDAP where the communication is done over TCP protocol, the CLDAP ping is sent over UDP to be faster. It is often necessary for SSSD to try to find available domain controllers within a domain, or within an AD site. SSSD sends a LDAP ping during the service discovery phase by sending a `rootDSE <https://ldapwiki.com/wiki/RootDSE>`_ search of the **netlogon** attribute. If available, the AD domain controller will return site, forest, and domain information in the **netlogon** response.
+`CLDAP (Connection-Less LDAP) ping  <https://ldapwiki.com/wiki/Wiki.jsp?page=LDAP%20ping>`_ is a way for clients to check the liveliness of a domain controller. Instead of LDAP where the communication is done over TCP protocol, the CLDAP ping is sent over UDP to be faster. It is often necessary for SSSD to try to find available domain controllers within a domain, or within an AD site. SSSD sends a LDAP ping during the service discovery phase by sending a `rootDSE <https://ldapwiki.com/wiki/Wiki.jsp?page=RootDSE>`_ search of the **netlogon** attribute. If available, the AD domain controller will return site, forest, and domain information in the **netlogon** response.
 
 .. seealso::
 
