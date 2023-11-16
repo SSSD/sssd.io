@@ -63,17 +63,17 @@ Before starting make sure you have the following information:
 - AD Server IP *e.g. 1.2.3.4*
 - AD Server hostname *e.g. ad1.sssd.io*
 
-Install the necessary packages, for RHEL and clones the packages are ``sssd, adcli, realm, oddjob`` and ``oddjob-mkhomedir``
+Install the necessary packages, for RHEL and clones the packages are ``sssd, adcli, realmd, oddjob`` and ``oddjob-mkhomedir``
 
 .. code-tabs::
 
     .. fedora-tab::
 
-        dnf install -y sssd adcli realm oddjob oddjob-mkhomedir
+        dnf install -y sssd adcli realmd oddjob oddjob-mkhomedir
 
     .. rhel-tab::
 
-        yum install -y sssd adcli realm oddjob oddjob-mkhomedir
+        yum install -y sssd adcli realmd oddjob oddjob-mkhomedir
 
 Make sure DNS is pointing to your AD server(s) by checking ``/etc/resolv.conf`` and it having it contain an entry with an AD server IP, if it’s missing go ahead and add it, as the first entry.
 
