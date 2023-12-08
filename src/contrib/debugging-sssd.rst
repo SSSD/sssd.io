@@ -20,6 +20,12 @@ Child processes
     data. They are located in ``/usr/libexec/sssd`` and suffixed with
     ``_child``, for example ``krb5_child``, ``ldap_child`` or ``gpo_child``.
 
+KCM
+    ``sssd-kcm`` is a part of SSSD that works independently of the other
+    processes. It is a store for Kerberos credentials and is usually activated
+    by ``systemd`` when a Kerberos tool (such as ``kinit`` or ``klist``) open
+    its socket for communication.
+
 The following snippet shows a list of running SSSD process with three responders
 (nss, pam and pac) and three different domains (ldap.test, samba.test and
 ipa.test).
@@ -90,7 +96,6 @@ option in ``sssd.conf``, for example to 30000 seconds.
 .. code-block:: ini
 
     [sssd]
-    config_file_version = 2
     services = nss, pam
     domains = ldap.test, samba.test, ipa.test
     user = root
@@ -115,15 +120,15 @@ option in ``sssd.conf``, for example to 30000 seconds.
     timeout=30000
     ...
 
-Attaching debugger to a running process
-***************************************
+Attaching a debugger to a running process
+*****************************************
 
 There is only one process for each responder that can be distinguished by name,
 therefore it is simple to attach a debugger to the running process. For example:
 
 .. code-block::
 
-    $ sudo gdb program `pgrep sssd_nss`
+    $ sudo gdb /usr/libexec/sssd/sssd_nss `pgrep sssd_nss`
 
 There can be multiple backend ``sssd_be`` processes and we need to use the
 ``--domain`` parameter to distinguish between them. Therefore we want to use the
@@ -133,11 +138,11 @@ the debugger to ``ldap.test`` domain:
 
 .. code-block::
 
-    $ sudo gdb program `pgrep -f "sssd_be.+ldap.test"`
+    $ sudo gdb /usr/libexec/sssd/sssd_be `pgrep -f "sssd_be.+ldap.test"`
 
 .. seealso::
 
-    We created set of `gdb extensions <https://github.com/SSSD/sssd-gdb>`__ for
+    We created a set of `gdb extensions <https://github.com/SSSD/sssd-gdb>`__ for
     SSSD that provides pretty printers to some difficult SSSD structures.
 
 Debugging forked process from its start
@@ -206,3 +211,89 @@ i.e. ``su admin@ipa.test``. Then start gdb and attach it to the server:
     debugging the child once it is forked off the parent. See `gdb manual
     <https://sourceware.org/gdb/onlinedocs/gdb/Forks.html>`__ for more
     information.
+
+Debugging KCM
+*************
+KCM is different from other SSSD processes in the way it is launched. It is not
+forked by the monitor as all the other processes, but it is launched by a
+``systemd trigger unit`` when a client application (like ``klist``) opens its
+socket. After 5 minutes of inactivity it will automatically shut down unless
+ticket renewal is active, in which case the timeout is disabled).
+
+Once it is active (running) it is possible to attach a debugger as described
+above, but it is also possible to launch it manually (instead of waiting for
+``systemd`` to trigger it). A ``systemd trigger`` is a special type of unit that
+will start a ``systemd service`` when a certain event happens. For KCM the event
+is a client opening the socket. The service is ``sssd-kcm.service`` and is
+triggered by ``sssd-kcm.socket``.
+
+To manually launch KCM, start the service:
+
+.. code-block:: console
+
+    $ sudo systemctl start sssd-kcm.service
+
+It is also possible to stop it with the ``stop`` command.
+
+While debugging, it can be useful to disable the automatic shut down by setting
+the ``responder_idle_timeout`` option to 0 in ``sssd.conf``. Similarly, the
+``client_idle_timeout`` option should be set to a large number of seconds.
+This value specifies how long a client can sit idle before being disconnected.
+
+.. code-block:: ini
+
+    [kcm]
+    responder_idle_timeout=0
+    client_idle_timeout=10000
+
+KCM can also be launched from the command line. For that, disable the
+``systemd trigger`` and stop any active instance of KCM.
+
+.. code-block:: console
+
+    $ sudo systemctl stop sssd-kcm.socket
+    $ sudo systemctl stop sssd-kcm.service
+
+If you need to watch KCM's start up, launch it from the command line with
+some useful debug options:
+
+.. code-block:: console
+
+    $ sudo /usr/libexec/sssd/sssd_kcm --uid 0 --gid 0 --logger=stderr --debug-level=9
+
+To debug KCM from its start, launch ``sssd_kcm`` in the debugger:
+
+.. code-block:: console
+
+    $ sudo gdb /usr/libexec/sssd/sssd_kcm
+    (gdb) break main
+    (gdb) run --uid 0 --gid 0 --logger=files
+
+Alternatively, launch ``sssd_kcm`` with ``strace``:
+
+.. code-block:: console
+
+    $ sudo strace /usr/libexec/sssd/sssd_kcm --uid 0 --gid 0 --logger=files
+
+or, to dump of the KCM socket data (protocol request/response), intermixed with
+KCM debug logging:
+
+.. code-block:: console
+
+    $ sudo strace -p $(pidof sssd_kcm) -Ttxvs 1024 -e read=$FDS -e read,readv,write
+
+
+Finally, to debug what the Kerberos tools are doing and how they interact with
+KCM, you can set the ``KRB5_TRACE`` environment variable to the path of the
+file that will receive the logged messages:
+
+.. code-block:: console
+
+    $ export KRB5_TRACE=/dev/stdout
+    $ kinit
+
+.. seealso::
+
+    More information can be found in KCM's design page, but please be aware
+    that the information in this page is not maintained and can be obsolete.
+
