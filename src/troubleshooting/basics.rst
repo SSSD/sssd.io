@@ -8,7 +8,7 @@ SSSD debug logs
 
 Each SSSD process is represented by a section in the ``sssd.conf`` config file. To enable debugging persistently across SSSD service restarts, put the directive ``debug_level=N``, where N typically stands for a number between 1 and 10 into the particular section. Debug levels up to 3 should log mostly failures and anything above level 8 provides a large number of log messages. Level 6 might be a good starting point for debugging problems. You can also use the ``sss_debuglevel(8)`` tool to enable debugging on the fly without having to restart the daemon.
 
-On Fedora/RHEL, debug logs are stored under ``/var/log/sssd``. There is one log file per SSSD process. The services (also called responders) log into a log file called ``sssd_$service``, for example NSS responder logs to ``/var/log/sssd/sssd_nss.log``. Domain sections log to files called ``sssd_$domainname.log``. The short-lived helper processes also log to their own log files, such as ``ldap_child.log`` or ``krb5_child.log``.
+On Fedora/RHEL, debug logs are stored under ``/var/log/sssd``. There is one log file per SSSD process. The services (also called responders) log into a log file called ``sssd_$service``, for example NSS responder logs to ``/var/log/sssd/sssd_nss.log``. Domain sections log to files called ``sssd_$domainname.log``. The short-lived helper processes also log to their own log files, such as ``ldap_child.log`` or ``krb5_child.log``. KCM logs to the file ``sssd_kcm.log``.
 
 .. note::
 
