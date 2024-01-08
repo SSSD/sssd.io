@@ -55,6 +55,7 @@ Table of Contents
    docs/introduction
    Architecture <docs/architecture>
    docs/reporting-bugs
+   docs/files-provider-deprecation
 
 .. toctree::
    :caption: Active Directory
