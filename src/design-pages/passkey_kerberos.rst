@@ -139,10 +139,9 @@ the components involved in it:
 * The passkey returns the assertion data, which also is returned by the
   passkey_child.
 
-* The PAM responder fills the pre-authentication with the assertion data. If
-  the credential is discoverable, then the ``userId`` is included in the
-  assertion data. The PAM responder checks if it matches with the one stored in
-  the LDAP attribute, and it fails if they don't match. 
+* The PAM responder fills the pre-authentication with the assertion data. The
+  PAM responder checks if it matches with the one stored in the LDAP attribute,
+  and it fails if they don't match.
 
 * libkrb5 send another AS-REQ but this time with the assertion in the
   pre-authentication.
