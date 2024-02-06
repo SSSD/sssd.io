@@ -72,12 +72,8 @@ ipapasskey from the
 `ipapasskeyuser objectclass <https://freeipa.readthedocs.io/en/latest/designs/passkeys.html#ldap-schema>`__
 . For any other LDAP server we use the passkey attribute.
 
-The format for server-side credentials for the key mapping is
+The format for the key mapping is
 ``passkey:credentialId,pemPublicKey``.
-
-The format for
-`discoverable credentials <https://developers.yubico.com/WebAuthn/WebAuthn_Developer_Guide/Resident_Keys.html>`__ for the key mapping is
-``passkey:credentialId,pemPublicKey,userId``.
 
 IPA process
 +++++++++++
@@ -146,10 +142,7 @@ Execute the passkey_child passing the arguments listed above. The passkey PIN
 is retrieved from the PAM conversation and written to the stdin of the
 forked passkey child process(Similar to ``get_p11_child_write_buffer()``).
 Check the passkey_child return code, return PAM_SUCCESS or failure based on the
-result and call ``pam_reply()``. If the credential is discoverable, then the
-passkey_child also prints the ``userId``, and the PAM responder has to
-compare it with the one provided by the LDAP server. If they match, then it can
-return PAM_SUCCESS.
+result and call ``pam_reply()``.
 
 Prompting implementation
 ************************
@@ -276,7 +269,7 @@ The most basic example of a registration would be the following: ::
     # sssctl passkey-exec --register --username=USERNAME --domain=DOMAIN
 
 This outputs the key mapping data (
-``passkey:credentialId,pemPublicKey,userId``) that is used as the input for the
+``passkey:credentialId,pemPublicKey``) that is used as the input for the
 registration in the LDAP server. In AD and other LDAP servers the output is
 copied to the LDAP attribute. In FreeIPA, the key mapping can copied to the
 WebUI or to a command:
