@@ -163,7 +163,7 @@ Edit ``/etc/sssd/sssd.conf`` and add a new domain section. The section should lo
 
 .. note::
 
-    CA certificates are usually kept in ``/etc/openldap/cacert``, and ``start_tls`` or ``ldaps`` should be used, **DO NOT** use both at the same time.
+    CA certificates are usually kept in ``/etc/openldap/cacerts``, and ``start_tls`` or ``ldaps`` should be used, **DO NOT** use both at the same time.
 
 If anonymous queries are not enabled on the server, the following section is required for the bind account.
 
