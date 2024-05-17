@@ -4,6 +4,12 @@ SSSD 2.9.5 Release Notes
 Highlights
 ----------
 
+Security
+~~~~~~~~
+
+* Moderate. CVE-2023-3758. Fixed a race condition flaw in GPO policy
+  application. `GHSA-7pwr-cfrc-px4f <https://github.com/advisories/GHSA-7pwr-cfrc-px4f>`_
+
 Configuration changes
 ~~~~~~~~~~~~~~~~~~~~~
 
