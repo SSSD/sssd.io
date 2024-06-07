@@ -38,7 +38,7 @@ The following sections are optional reading, it contains information which may b
 Testing with a clean cache
 ==========================
 
-You may have made iterative changes to your setup while learning about SSSD. To make sure that your setup actually works, and you're not relying on cached credentials, or cached LDAP information, you may want to clear out the local cache. Obviously this will erase local credentials, and all cached user information, so you should only do this for testing, and while on the network with network access to the AD servers:
+You may have made iterative changes to your setup while learning about SSSD. To make sure that your setup actually works, and that you're not relying on cached credentials, or cached LDAP information, you may want to clear out the local cache. Obviously this will erase local credentials, and all cached user information, so you should only do this for testing, and while on the network with network access to the AD servers:
 
 .. code-block:: bash
 

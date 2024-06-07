@@ -2,9 +2,9 @@ Introduction to Active Directory
 ################################
 
 `Active Directory Domain Services`_ is Microsoft's product for enterprise
-identity management. It contains multiple services such LDAP (database),
+identity management. It contains multiple services such as LDAP (database),
 Kerberos (authentication), Group Object Policies (access control and policy),
-DNS and more. Even though it has official support only on Microsoft Windows,
+DNS and more. Even though it only has official support on Microsoft Windows,
 SSSD provides seamless integration of Linux clients with Active Directory
 through the ``ad`` provider, including automatic SID to uid/gid translation.
 
@@ -13,7 +13,7 @@ The following features are supported in SSSD Active Directory integration:
 * Full support of Active Directory users and groups
 * Kerberos authentication
 * Access control via Group Policy Objects
-* Auto-discovery of of trusted domains (subdomains in SSSD terminology)
+* Auto-discovery of trusted domains (subdomains in SSSD terminology)
 * Auto-discovery of Active Directory site and forest
 * Automatic SID to uid and gid translation
 * Dynamic DNS records updates
@@ -42,7 +42,7 @@ The following features are supported in SSSD Active Directory integration:
   If you want to avoid enrolling to the Active Directory domain explicitly, you
   may also use the ``ldap`` provider (:doc:`ad-ldap-provider`). This requires
   deeper understanding of SSSD configuration and does not provide all the
-  features and benefits of the ``ad`` provider therefore it is not generally
+  features and benefits of the ``ad`` provider, therefore it is not generally
   recommended.
 
 Integrating Active Directory through FreeIPA
@@ -52,5 +52,5 @@ If you need to manage large numbers of both Windows and Linux machines, you may
 want to consider using FreeIPA for Linux systems and establish a trust between
 FreeIPA and Active Directory domains. This will keep all the benefits of direct
 Active Directory integration but also grants you better control over the Linux
-system through Linux-specific identity management product. Visit
+system through a Linux-specific identity management product. Visit
 :doc:`../ipa/ipa-introduction` for more information.
