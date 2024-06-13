@@ -55,7 +55,7 @@ def build_search_index(app, exception):
 
     docs = []
     for path in glob.glob(f'{build_dir}/**/*.html', recursive=True):
-        relpath = path[len(build_dir) + 1:]
+        relpath = path[len(str(build_dir)) + 1:]
         if relpath in exclude_pages:
             continue
 
