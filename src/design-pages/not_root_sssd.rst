@@ -23,6 +23,14 @@ This is a general use-case, following the principle of least privilege.
 The processes should not run as root unless they really need the root
 privileges.
 
+Important note
+--------------
+The text below describes initial design. The sssd-2.10 release introduces major
+improvements and changes in this area. For more details, please refer to the
+`SSSD 2.10.0-beta1 <https://sssd.io/release-notes/sssd-2.10.0-beta1.html#general-information>`__
+and `SSSD 2.10.0-beta2 <https://sssd.io/release-notes/sssd-2.10.0-beta2.html#packaging-changes>`__
+Release Notes.
+
 Implementation details
 ----------------------
 
