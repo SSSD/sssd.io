@@ -8,9 +8,8 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update -y
-        sudo apt-get install graphviz plantuml
-        pip3 install virtualenv
-        virtualenv .venv
+        sudo apt-get install graphviz plantuml python3-venv
+        python3 -m venv .venv
         source .venv/bin/activate
         pip3 install -r ./requirements.txt
     - run: source .venv/bin/activate && make html SPHINXOPTS="-W --keep-going -n"
