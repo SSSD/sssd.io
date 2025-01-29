@@ -29,7 +29,7 @@ Packaging changes
 
   A set of capabilities required by privileged binaries was further reduced to:
 
-  .. code-block:: plain
+  .. code-block:: text
 
       krb5_child cap_dac_read_search,cap_setgid,cap_setuid=p
       ldap_child cap_dac_read_search=p
@@ -41,7 +41,7 @@ Packaging changes
   capabilities: it's very important to make sure that those are executable only
   by root/sssd service user. For this reason upstream spec file packages it as:
 
-  .. code-block:: plain
+  .. code-block:: text
 
       -rwxr-x---. 1 root sssd
 
