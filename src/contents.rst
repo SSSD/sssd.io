@@ -12,6 +12,7 @@ Table of Contents
    contrib/debugging-sssd
    contrib/coding-style
    contrib/running-tests
+   contrib/profiling-sssd
 
 .. toctree::
    :caption: Fundamentals
