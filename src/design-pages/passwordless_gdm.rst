@@ -117,6 +117,46 @@ diagram.
   authentication mechanism. This will be explained separately for each
   mechanism.
 
+krb5_child
+**********
+``krb5_child`` is the helper binary in charge of Kerberos authentication. It
+follows the general model of separating the authencation in two steps:
+``preauthentication`` and ``authentication``. The first part opens a connection
+to the KDC to receive the Kerberos pre-authentication methods available for the
+given user. ``krb5_child`` behaves differently depending if there are
+pre-authentication methods which have to keep the state. Currently this would
+be EIdP and passkey. If such a method is found it is immediately selected by
+``krb5_child``, which keeps running and hence keeps the state while the
+information is displayed to the user and they follow the necessary steps for
+authentication. At this point is when the status changes to ``authentication``
+and the still running ``krb5_child`` proceeds with the authentication itself.
+
+If there are no ``stateful`` authentication methods found (password, 2-factor
+authentication, Smartcard/pkinit) a list of available methods are returned by
+``krb5_child`` at the end of ``preauthentication`` and ``krb5_child`` exits.
+The PAM responder selects an authentication method based on some heuristics,
+e.g. if pkinit is available and a Smartcard is present pkinit is selected. Now
+the suitable prompt is displayed to the user and after they entered the
+required credentials the backend starts a new ``krb5_child`` for
+``authentication``. After the KDC has returned the available Kerberos
+pre-authentication method ``krb5_child`` uses the pre-authentication methods
+matching the given credentials to finish the authentication.
+
+This was a valid solution when SSSD was the one deciding which authentication
+method to use during the process. This is no longer the case, since with this
+new proposal it is the user who decides the mechanism to be used, so the
+current ``krb5_child`` design must be extended.
+
+During the ``preauthentication`` phase, ``krb5_child`` opens a connection to
+the KDC to receive the Kerberos pre-authentication methods available for the
+given user and all necessary information (e.g. login URLs, codes, prompts).
+At this point ``krb5_child`` is kept alive for all methods as it must wait for
+the user response. The information is displayed to the user and once they enter
+the credentials, pam_sss switches to the ``authentication`` phase and PAM
+responder serializes the credentials in the ``sss_auth_token`` structure.
+The still running ``krb5_child`` gets the authentication type and the
+credentials, and proceeds with the authentication itself.
+
 .. _data:
 
 Data
