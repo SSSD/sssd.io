@@ -117,6 +117,32 @@ diagram.
   authentication mechanism. This will be explained separately for each
   mechanism.
 
+krb5_child
+****************
+``krb5_child`` is the helper binary in charge of Kerberos authentication. It
+follows the general model of separating the authencation in two steps:
+``preauthentication`` and ``authentication``. The first part opens a session
+to obtain the data related to the authentication (i.e. EIdP code). The
+``krb5_child`` keeps the state while the information is displayed to the user
+and they follow the necessary steps for authentication. At this point is when
+the status changes to ``authentication`` and proceeds with the authentication
+itself.
+
+This was a valid solution when SSSD was the one deciding which authentication
+method to use during the process. This is no longer the case, since with this
+new proposal it is the user who decides the mechanism to be used, so the
+current ``krb5_child`` design must be extended.
+
+During the ``preauthentication`` phase all authentication methods that are
+available to the user are checked and all necessary information (e.g. login
+URLs, codes, prompts) is obtained to proceed with the authentication.
+Since some authentication mechanisms need to keep a session open, these are
+marked as keep-alive. The information is displayed to the user and once
+the user enters the credentials, pam_sss switches to the ``authentication``
+phase and PAM responder serializes the credentials in the ``sss_auth_token``
+structure. ``krb5_child`` gets the authentication type and the credentials,
+and continues with the authentication process.
+
 .. _data:
 
 Data
