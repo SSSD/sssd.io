@@ -4,6 +4,10 @@
 Integration tests
 =================
 
+.. note::
+
+    We are replacing our integration tests, please note that this page is deprecated and may contain out of date information. Please refer to :doc:`system-tests` for the latest information.
+
 SSSD integration tests run the deamon at the same machine you are developing on with the help from the `cwrap <https://cwrap.org>`_. The integration tests are half-way between the unit tests that call APIs or run a single component in isolation and between the multihost tests that run on a dedicated VM. During the integration tests, a build of SSSD is compiled and installed into an environment set up with the help of the ``fakeroot`` program. Then, the cwrap libraries are preloaded into the test environment. The socket_wrapper library provides networking through UNIX pipes, the uid_wrapper library provides the notion of running as root and the nss_wrapper library allows to route requests for users and groups through the NSS module under test.
 
 The advantage over the unit tests is obvious, the full daemon is ran and you can talk to the SSSD using the same interfaces as a user would do in production, e.g. resolve a user with ``getpwnam``. Because the tests are ran on the same machine as the developer works on, it is much faster to compile a new SSSD version for the tests to run and so the develop-test-fix cycle is generally quite fast. The integration tests also offer a simple way to add a "breakpoint" to the tests and connect to the tests using ``screen(1)``. Finally, since the tests run on the same machine, they can trivially run on any OS release or any distribution with little to no changes, even in build systems that typically have no network connectivity as part of the SSSD build.
