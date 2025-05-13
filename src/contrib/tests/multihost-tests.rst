@@ -4,6 +4,10 @@
 Multihost tests
 ===============
 
+.. note::
+
+    We are replacing our multihost tests, please note that this page is deprecated and may contain out of date information. Please refer to :doc:`system-tests` for the latest information.
+
 SSSD multihost tests are the closest our tests get to running SSSD in the real world. The multihost tests utilize a VM the tests are ran at, so no part of the setup is faked. This is also the test's biggest advantage, as long as you can prepare the test environment, the tests can then be used to test even Active Directory or FreeIPA integration. Also, unlike the cwrap tests or the unit tests, the multihost tests are typically good enough for distribution QE teams, so the multihost tests allow a collaboration between the team that typically just develops SSSD and the team that tests it.
 
 The disadvantage of the tests is that setting up the environment can be complex and the development loop (the time between modifying test, modifying the SSSD sources, deploying them to the test environment and running the tests) is much longer than with the cwrap based tests.
