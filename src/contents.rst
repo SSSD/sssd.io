@@ -11,7 +11,7 @@ Table of Contents
    contrib/building-sssd
    contrib/debugging-sssd
    contrib/coding-style
-   contrib/running-tests
+   contrib/tests
    contrib/profiling-sssd
 
 .. toctree::
