@@ -95,6 +95,7 @@ Table of Contents
    Basics <troubleshooting/basics>
    Backend <troubleshooting/backend>
    SSSD Errors <troubleshooting/errors>
+   Performance Tuning <troubleshooting/performance>
    Log Analyzer <troubleshooting/analyzer>
    Fleet Commander <troubleshooting/fleet-commander>
    SUDO <troubleshooting/sudo>
