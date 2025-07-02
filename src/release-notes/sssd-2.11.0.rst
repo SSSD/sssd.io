@@ -10,7 +10,7 @@ General information
 * The deprecated tool ``sss_ssh_knownhostsproxy`` was finally removed, together
   with the ``./configure`` option ``--with-ssh-known-host-proxy`` used to build it.
   It is now replaced by a stub which displays an error message. Instead of this
-  tool, you must now use ``sss_ssh_knownhosts`. Please check the
+  tool, you must now use ``sss_ssh_knownhosts``. Please check the
   sss_ssh_knownhosts(1) man page for detailed information.
 * Support for the previously deprecated ``sssd.conf::user`` option
   (``--with-conf-service-user-support`` ``./configure`` option) was removed.
@@ -21,7 +21,7 @@ General information
   case of potential conflict.
 * Previously deprecated ``--with-files-provider`` configure option and thus
   support of ``id_provider = files`` were removed.
-* Previously deprecated ``--with-libsifp`` configure option and ``sss_simpleifp'
+* Previously deprecated ``--with-libsifp`` configure option and ``sss_simpleifp``
   library were removed.
 * ``krb5-child-test`` was removed. Corresponding tests under ``src/tests/system/``
   are aimed to provide a comprehensive test coverage of ``krb5_child``
