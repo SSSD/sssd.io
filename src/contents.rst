@@ -89,6 +89,12 @@ Table of Contents
    docs/krb/krb-migration
 
 .. toctree::
+   :caption: Identity Providers (IdP)
+   :maxdepth: 0
+
+   Introduction <docs/idp/idp-introduction>
+
+.. toctree::
    :caption: Troubleshooting
    :maxdepth: 0
 
