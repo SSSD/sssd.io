@@ -39,8 +39,10 @@ IPA.
 
 Beside FreeIPA and Active Directory, SSSD can also integrate to other identity
 solutions using the LDAP provider (for pure LDAP servers) and the Kerberos
-provider (for Kerberos authentication instead of plain passwords). It can also
-directly integrate with local users using the files provider.
+provider (for Kerberos authentication instead of plain passwords).
+Additionally, some OAuth2.0/OIDC based Identity Providers (IdPs) are supported
+via the IdP provider. It can also directly integrate with local users using the
+files provider.
 
 .. note::
 
@@ -56,6 +58,7 @@ directly integrate with local users using the files provider.
     - `man sssd-krb5 <https://www.mankier.com/5/sssd-krb5>`_
     - `man sssd-ipa <https://www.mankier.com/5/sssd-ipa>`_
     - `man sssd-ad <https://www.mankier.com/5/sssd-ad>`_
+    - `man sssd-idp <https://www.mankier.com/5/sssd-idp>`_
     - `man sssd-files <https://www.mankier.com/5/sssd-files>`_
 
     For more information about FreeIPA and other compatible directory servers,
