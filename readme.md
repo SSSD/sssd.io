@@ -38,7 +38,7 @@ linked to each other:
 ```console
 $ firefox _build/html/index.html
 ```
-You do not need to be in virtual environment to see the build result.
+You d not need to be in virtual environment to see the build result.
 
 ## Example page
 
