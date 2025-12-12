@@ -12,7 +12,15 @@ class HTMLDirective(sphinx.util.docutils.SphinxDirective):
 
 
 def node_to_html(builder, node):
-    body = builder.render_partial(node)['html_body']
+    rendered = builder.render_partial(node)
+
+    # Handle different Sphinx versions - newer versions use 'fragment', older use 'html_body'
+    for key in ('fragment', 'html_body'):
+        if key in rendered:
+            body = rendered[key]
+            break
+    else:
+        raise KeyError(f"Expected 'fragment' or 'html_body' in render_partial output, got: {list(rendered.keys())}")
 
     # body is in the form <div class="document">\nbody\n</div>
     # we want to remove the wrapper
