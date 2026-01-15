@@ -33,6 +33,8 @@ New features
   possible. For more technical details and implementation specifications, see
   the `design documentation
   <https://sssd.io/design-pages/passwordless_gdm.html>`__
+* Generic SSSD LDAP provider (``id_provider = ldap``) now supports fetching
+  subid ranges, a feature previously supported only by the IPA provider.
 
 Packaging changes
 ~~~~~~~~~~~~~~~~~
