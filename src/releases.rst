@@ -8,6 +8,10 @@ SSSD Releases
 
 .. releases::
 
+    .. release:: sssd-2.12.0
+        :date: 2026-01-15
+        :download: https://github.com/SSSD/sssd/releases/tag/2.12.0
+
     .. release:: sssd-2.11.1
         :date: 2025-07-31
         :download: https://github.com/SSSD/sssd/releases/tag/2.11.1
