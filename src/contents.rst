@@ -10,6 +10,7 @@ Table of Contents
    Introduction <contrib/introduction>
    contrib/building-sssd
    contrib/debugging-sssd
+   contrib/releasing-sssd
    contrib/coding-style
    contrib/tests
    contrib/profiling-sssd
