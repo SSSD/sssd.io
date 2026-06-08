@@ -1,39 +1,82 @@
 Releasing SSSD
 ##############
 
-This is a step by step guide for core developers on releasing a new SSSD
-version.
+This guide outlines the steps for releasing a new SSSD version.
 
-#. Find all `opened Weblate pull requests <https://github.com/SSSD/sssd/pulls?q=is%3Apr+is%3Aopen+weblate>`__ (translations)
+Pre-Release Steps
+*****************
 
-   #. Make sure SSSD builds (PR CI build job), sometimes new translations introduce errors
-   #. If not, fix the translations at
-      https://translate.fedoraproject.org/projects/sssd
-   #. Merge them
+1. **Handle Translation PRs**
 
-#. If this is a new major release, make sure the master branch PR CI is green
-   and create a branch sssd-X-Y (e.g. sssd-2-12) and push it to SSSD repository.
-   If this is a minor release and the branch already exist, make sure PR CI is
-   green.
-#. Go to https://github.com/SSSD/sssd/actions/workflows/release.yml
-#. Click on "Run workflow" and provide parameters:
+   * Check all open Weblate pull requests on GitHub
+   * Make sure SSSD builds (PR CI build job)
+   * If the build fails, fix translations at https://translate.fedoraproject.org/projects/sssd
+   * Merge approved PRs
 
-   * Target branch to release from: sssd-X-Y, e.g. sssd-2-12
-   * Release version: X.Y.Z, e.g. 2.12.6
-   * Previous version: X.Y.Z-1, e.g. 2.12.5
+2. **Verify Branch Status**
 
-The workflow will create a new GitHub draft release and a pull request with
-release notes at sssd.io repository. Review, edit and merge the release notes,
-then publish the release on GitHub.
+   * For **major releases from master**: Verify master branch CI is green
+   * For **minor/patch releases**: Confirm the existing stable branch
+     (`sssd-X-Y`) has green CI
 
-Packit will automatically create pull requests against active Fedora versions in
-Fedora sources. When the pull request is pushed, packit automatically creates
-koji build and bodhi update.
+.. warning::
+
+    For major releases, the stable branch `sssd-X-Y` will be created
+    automatically by the release workflow. Do NOT create it manually beforehand.
+
+Release Execution
+*****************
+
+3. **Trigger Release Workflow**
+
+   * Navigate to https://github.com/SSSD/sssd/actions/workflows/release.yml
+   * Click "Run workflow" and configure:
+
+     * **Target branch to release from**:
+
+       * `master` for major releases (e.g., 2.10.0)
+       * `sssd-X-Y` for minor/patch releases (e.g., sssd-2-13)
+
+     * **Release version**: `X.Y.Z` format (e.g., `2.13.1`)
+     * **Create stable branch**: (optional, default: `auto`)
+
+       * `auto` - Creates stable branch automatically when releasing from master
+       * `no` - Skip branch creation (useful for pre-releases like beta/rc)
+
+4. **Finalize Release**
+
+   * Review the draft GitHub release
+   * Review the release notes PR at sssd.io
+   * Edit both as needed
+   * Merge the sssd.io PR with the release notes
+   * Publish the GitHub release
 
 .. note::
 
-    We generate large release notes between two major releases to avoid issues,
-    since the new release branch and old release branch diverged. If the last
-    release is 2.12.6 and you are releasing a new major release 2.13.0 provide
-    2.12.0 as the previous version. Release notes will be generated between
-    ``2.12.0..2.13.0``.
+    The workflow automatically:
+
+    * Computes the previous version for release notes generation
+    * Creates and signs the release tag
+    * Builds and signs the tarball (with GPG and SHA256)
+    * Generates release notes from commit history
+    * Pushes the tag to GitHub
+    * For master releases (when `create_stable_branch=auto`):
+
+      * Creates the `sssd-X-Y` stable branch from the release tag
+      * Creates the `backport-to-sssd-X-Y` GitHub label for backport tracking
+
+    * Creates a draft GitHub release with artifacts
+    * Opens a PR to sssd.io with generated release notes
+
+    The workflow automatically computes the previous version (for release notes
+    generation):
+
+    * For X.Y.Z releases (Z>0): uses X.Y.(Z-1)
+    * For X.Y.0 releases (Y>0): uses X.(Y-1).0
+    * For X.0.0 releases: finds the latest stable tag via git history
+
+Post-Release
+************
+
+Packit automatically creates pull requests for active Fedora versions,
+triggering koji builds and bodhi updates after the pull request is merged.
