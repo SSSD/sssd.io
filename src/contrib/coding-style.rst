@@ -247,3 +247,14 @@ Localization and Internationalization
 Our development policy for the SSSD requires that any code that generates
 a user-facing message should be wrapped by GNU ``gettext`` macros so that they
 can eventually be translated.
+
+Use of AI-Assisted Tools
+************************
+
+When contributing code or documentation that was produced with significant
+assistance from generative AI tools, contributors should indicate that the
+content is AI-generated or AI-assisted. This applies to any nontrivial portions
+of output intended for inclusion in the SSSD codebase, documentation, or other
+publicly visible materials. Contributors should specify the tool and, where
+possible, the model used in the commit message, preferably using a Git trailer
+(e.g., ``Assisted-By: <tool> (<model>)``).
