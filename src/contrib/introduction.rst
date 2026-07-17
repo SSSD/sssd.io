@@ -10,7 +10,7 @@ help.
 .. _SSSD GitHub project: https://github.com/SSSD/sssd
 .. _GitHub workflow: https://guides.github.com/introduction/git-handbook
 .. _git: https://git-scm.com
-.. _community channels: ../community
+.. _community channels: /community
 
 .. seealso::
 
