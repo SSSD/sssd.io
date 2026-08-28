@@ -266,7 +266,8 @@ SSSD provides the available authentication mechanisms:
             "role": "eidp",
             "initPrompt": "Login",
             "linkPrompt": "Log in online with another device",
-            "uri": "https://short.url.com/1234",
+            "completeUri": "https://short.url.com/login?code=1234",
+            "uri": "https://short.url.com/login",
             "code": "1234",
             "timeout": 300
           }
@@ -276,6 +277,8 @@ SSSD provides the available authentication mechanisms:
         ]
       }
     }
+
+**Note**: `completeUri` is optional; it will be empty if not supported by the IdP.
 
 GDM replies with the selection:
 
