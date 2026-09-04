@@ -14,6 +14,7 @@ Table of Contents
    contrib/coding-style
    contrib/tests
    contrib/profiling-sssd
+   contrib/security-policy
 
 .. toctree::
    :caption: Fundamentals
