@@ -88,4 +88,4 @@ Alternatively, ask on the ``#sssd`` channel on libera.chat. Several SSSD or Free
 Consider if the bug has security consequences
 *********************************************
 
-If you think you found a bug that has security impact (allows an unprivileged user to compromise SSSD or elevate privileges for instance), don't file the bug in a public bug tracker. Instead, e-mail any of the SSSD developers instead.
+If you think you found a bug that has security impact (allows an unprivileged user to compromise SSSD or elevate privileges for instance), don't file the bug in a public bug tracker. Instead, please follow the steps in :ref:`Reporting a Vulnerability <reporting_a_vulnerability>`.

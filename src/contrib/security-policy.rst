@@ -38,6 +38,7 @@ dedicated SSSD system user or the root user can access it. It is expected that
 there is always sufficient disk space for operations on the cache file, if e.g.
 the disk is full some functionality of SSSD might be degraded.
 
+.. _reporting_a_vulnerability:
 
 Reporting a Vulnerability
 *************************
