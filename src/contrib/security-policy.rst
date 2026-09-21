@@ -112,13 +112,18 @@ Security Advisories
 Published advisories are available at:
 Red Hat CVE database: `https://access.redhat.com/security/security-updates/cve?q=sssd <https://access.redhat.com/security/security-updates/cve?q=sssd>`_
 
-Safe Usage Guidelines
-*********************
+Security Best Practices
+***********************
 
 To use SSSD securely:
  - Keep updated: Always use supported versions
  - Always use encrypted connections and verify the server with e.g. TLS or
    SASL/GSSAPI
+ - When using TLS make sure the Certificate Authority (CA) certificates of your
+   system are well maintained or use a dedicate certificate bundle with only the
+   CA certificates needed by SSSD
+ - Do not use legacy encryption methods, if your system supports crypto
+   policies, use at least the default one
 
 Scope
 *****
