@@ -312,7 +312,8 @@ SSSD provides the available authentication mechanisms:
               {
                 "tokenName": "sc2",
                 "certInstruction": "Certificate for PIV Authentication\nCN=sc2,O=GDM.TEST",
-                "pinInstruction": "Enter PIN in reader",
+                "pinPrompt": "Use external keypad to enter PIN",
+                "usesKeypad": true,
                 "moduleName": "/usr/lib64/pkcs11/opensc-pkcs11.so",
                 "keyId": "02",
                 "label": "Certificate for PIV Authentication"
@@ -328,6 +329,10 @@ SSSD provides the available authentication mechanisms:
 
 **Note**: name field might have multiple lines.
 
+**Note**: usesKeypad is only present, and set to true, when the smartcard
+reader has its own protected PIN pad. In that case the PIN must be entered on
+the reader itself, not typed into the login screen.
+
 GDM replies with the selection:
 
 ..  code-block:: json
@@ -340,6 +345,25 @@ GDM replies with the selection:
           "tokenName": "sc1",
           "moduleName": "/usr/lib64/pkcs11/opensc-pkcs11.so",
           "keyId": "01",
+          "label": "Certificate for PIV Authentication"
+        }
+      }
+    }
+
+If usesKeypad was set, GDM echoes it back and sends an empty pin, since the
+PIN is entered on the reader itself:
+
+..  code-block:: json
+
+    {
+      "authSelection": {
+        "status": "Ok",
+        "smartcard": {
+          "pin": "",
+          "usesKeypad": true,
+          "tokenName": "sc2",
+          "moduleName": "/usr/lib64/pkcs11/opensc-pkcs11.so",
+          "keyId": "02",
           "label": "Certificate for PIV Authentication"
         }
       }
